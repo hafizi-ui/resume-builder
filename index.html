@@ -422,7 +422,7 @@
       ["job2B2", "Bullet 2", "", { sub: 1 }],
       ["job2B3", "Bullet 3", "", { sub: 1 }]
     ]},
-    { title: "6 · Leadership & co-curricular", fields: [
+    { title: "6 · Co-curricular", fields: [
       ["lead1", "Role 1", "Position, Programme / Club, Institution. Add an English translation for Malay names."],
       ["lead1Date", "Date", "Mon YYYY – Mon YYYY", { sub: 1 }],
       ["lead1B1", "Bullet 1a", "e.g. Managed a programme budget of RM2,000 and prepared the financial report", { sub: 1 }],
@@ -629,7 +629,7 @@
       lead.push({ k: "row", t: v(L[0]), d: v(L[0] + "Date") });
       bullets(L[1], lead);
     });
-    sec("LEADERSHIP & CO-CURRICULAR ACTIVITIES", lead);
+    sec("CO-CURRICULAR ACTIVITIES", lead);
 
     var ach = [];
     ["ach1", "ach2", "ach3", "ach4"].forEach(function (a) { if (v(a)) ach.push({ k: "ach", t: v(a), d: v(a + "Date") }); });
