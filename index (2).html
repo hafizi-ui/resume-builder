@@ -1,0 +1,1095 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>KPTM Resume Builder</title><meta name="description" content="Internship resume builder for KPTM students"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+  :root {
+    --navy: #1f3864;
+    --navy-ink: #1f3864;
+    --accent-soft: #e6ecf6;
+    --ground: #f2f4f8;
+    --surface: #ffffff;
+    --surface-2: #f8f9fc;
+    --ink: #1b2233;
+    --muted: #5a6478;
+    --line: #d8dee8;
+    --field: #fffbe8;
+    --field-line: #e4d27f;
+    --field-focus: #ffffff;
+    --bar-ink: #ffffff;
+    --tab-ink: rgba(255,255,255,.72);
+    --ok: #1e7d45;
+    --info: #2a6fb0;
+    --warn: #b0700c;
+    --bad: #c0392b;
+    --toast: #1b2233;
+    --toast-ink: #ffffff;
+    --preview-ground: #d9dee7;
+    --radius: 10px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --navy-ink: #9fb8e6;
+      --accent-soft: #1d2a42;
+      --ground: #11151d;
+      --surface: #181e29;
+      --surface-2: #1d2431;
+      --ink: #e5e9f1;
+      --muted: #9aa4b6;
+      --line: #2c3545;
+      --field: #232a22;
+      --field-line: #6e6431;
+      --field-focus: #1b2230;
+      --ok: #4cc27f;
+      --info: #6aa6e6;
+      --warn: #e0a94a;
+      --bad: #ef7a6c;
+      --toast: #e5e9f1;
+      --toast-ink: #11151d;
+      --preview-ground: #0c0f15;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --navy-ink: #9fb8e6;
+    --accent-soft: #1d2a42;
+    --ground: #11151d;
+    --surface: #181e29;
+    --surface-2: #1d2431;
+    --ink: #e5e9f1;
+    --muted: #9aa4b6;
+    --line: #2c3545;
+    --field: #232a22;
+    --field-line: #6e6431;
+    --field-focus: #1b2230;
+    --ok: #4cc27f;
+    --info: #6aa6e6;
+    --warn: #e0a94a;
+    --bad: #ef7a6c;
+    --toast: #e5e9f1;
+    --toast-ink: #11151d;
+    --preview-ground: #0c0f15;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Figtree", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--navy); color: var(--bar-ink);
+    padding-inline: 16px; padding-top: 12px;
+  }
+  .topbar-inner { max-width: 1360px; margin: 0 auto; }
+  .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { font-weight: 800; font-size: 18px; letter-spacing: .2px; }
+  .brand span { font-weight: 500; opacity: .7; font-size: 13px; margin-left: 8px; }
+  .score-chip {
+    border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1);
+    color: var(--bar-ink); border-radius: 999px; padding: 4px 12px; font-size: 13px;
+    font-weight: 600; cursor: pointer; font-variant-numeric: tabular-nums;
+  }
+  .score-chip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--c, #fff); }
+  .tabs { display: flex; gap: 2px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
+  .tab {
+    border: 0; background: transparent; color: var(--tab-ink); padding: 10px 14px;
+    font-weight: 600; cursor: pointer; border-radius: 8px 8px 0 0; white-space: nowrap;
+  }
+  .tab:hover { color: var(--bar-ink); }
+  .tab[aria-selected="true"] { background: var(--ground); color: var(--navy-ink); }
+
+  main { max-width: 1360px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 64px; }
+  .panel[hidden] { display: none; }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .toolbar .spacer { flex: 1; }
+  .btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--navy-ink); }
+  .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.15); }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--bad); }
+  .btn.sm { padding: 5px 10px; font-size: 13px; }
+  .btn[disabled] { opacity: .55; cursor: progress; }
+  .saved-state { font-size: 13px; color: var(--muted); }
+
+  .notice {
+    display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap;
+    background: var(--accent-soft); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 10px 14px; margin-bottom: 14px; font-size: 14px;
+  }
+  .notice p { margin: 0; flex: 1 1 260px; }
+
+  /* ---------- Form ---------- */
+  .form-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 540px); gap: 22px; align-items: start; }
+  .section { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 12px; }
+  .section > summary {
+    list-style: none; cursor: pointer; padding: 12px 16px; font-weight: 700; color: var(--navy-ink);
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .section > summary::-webkit-details-marker { display: none; }
+  .section > summary .count { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .section > summary::after { content: "▾"; color: var(--muted); }
+  .section:not([open]) > summary::after { content: "▸"; }
+  .section-body { padding: 0 16px 14px; border-top: 1px solid var(--line); display: grid; gap: 12px; padding-top: 12px; }
+  .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .field label .req { color: var(--bad); margin-left: 3px; }
+  .field.sub { padding-left: 14px; border-left: 2px solid var(--accent-soft); }
+  .field.gap { margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .field input, .field textarea, .field select {
+    width: 100%; background: var(--field); border: 1px solid var(--field-line);
+    border-radius: 6px; padding: 8px 10px; font-size: 14px;
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .field input:focus, .field textarea:focus, .field select:focus { background: var(--field-focus); outline: 2px solid var(--info); outline-offset: 0; }
+  .field .tip { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .field.missing input, .field.missing textarea { border-color: var(--bad); }
+  .photo-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .photo-row label.check { display: flex; align-items: center; gap: 6px; font-weight: 500; margin: 0; }
+  .photo-row input[type="checkbox"] { width: auto; }
+
+  .preview-wrap { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 112px); }
+  .preview-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+  .preview-box {
+    background: var(--preview-ground); border-radius: var(--radius); padding: 12px;
+    max-height: calc(100vh - 180px); overflow: auto;
+  }
+  .preview-box .page { transform-origin: top left; margin: 0; }
+
+  /* ---------- Resume paper (always white, like the printed page) ---------- */
+  .paper-scroll { overflow-x: auto; padding-bottom: 8px; }
+  .page {
+    width: 210mm; min-height: 297mm; margin: 0 auto; background: #ffffff; color: #111111;
+    padding: 12.7mm 14mm; box-shadow: 0 6px 24px rgba(10, 20, 40, .18);
+    font-family: "Carlito", Calibri, "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.32;
+  }
+  .r-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+  .r-name { font-size: 18pt; font-weight: 700; color: #1f3864; line-height: 1.15; margin: 0 0 4px; }
+  .r-contact div { margin: 1px 0; color: #333333; }
+  .r-photo {
+    width: 30mm; height: 38mm; flex: 0 0 auto; background: #e6e8ec; border: 1px solid #c9cdd4;
+    display: flex; align-items: center; justify-content: center; color: #8a8f99; font-size: 9pt; letter-spacing: 1px;
+  }
+  .r-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .r-sec { margin-top: 10pt; }
+  .r-sec h2 { font-size: 11pt; color: #1f3864; margin: 0 0 5pt; padding-bottom: 2pt; border-bottom: 1.2pt solid #1f3864; letter-spacing: .4px; }
+  .r-row { display: flex; justify-content: space-between; gap: 12px; margin-top: 5pt; }
+  .r-row:first-of-type { margin-top: 0; }
+  .r-row .t { font-weight: 700; }
+  .r-row.nobold .t { font-weight: 400; }
+  .r-row .d { white-space: nowrap; font-style: italic; color: #333333; }
+  .r-row.plain { margin-top: 1pt; }
+  .r-row.plain .t { font-weight: 400; }
+  .r-row.plain .t::before { content: "•"; margin-right: 8px; }
+  .r-sub { color: #333333; }
+  .r-bul { position: relative; padding-left: 14pt; margin: 1pt 0; }
+  .r-bul::before { content: "•"; position: absolute; left: 4pt; }
+  .r-text { text-align: justify; }
+  .r-label b { font-weight: 700; }
+
+  /* ---------- Coach ---------- */
+  .coach-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+  .card h3 { margin: 0 0 12px; color: var(--navy-ink); font-size: 16px; text-wrap: balance; }
+  .sugg { margin-top: 14px; }
+  .sugg-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+  .sugg p { margin: 6px 0 0; background: var(--surface-2); border: 1px dashed var(--line); padding: 8px 10px; border-radius: 6px; font-size: 14px; }
+  .score-big { display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
+  .score-big b { font-size: 56px; line-height: 1; color: var(--c); font-weight: 800; }
+  .score-big span { color: var(--muted); font-weight: 600; }
+  .score-msg { font-weight: 700; color: var(--c); margin-top: 6px; }
+  .meter { display: grid; grid-template-columns: repeat(16, 1fr); gap: 3px; margin-top: 14px; }
+  .meter i { height: 12px; border-radius: 3px; background: var(--line); }
+  .meter i.on { background: var(--c); }
+  .meter-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .table-scroll { overflow-x: auto; }
+  table.check { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+  table.check th, table.check td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.check th { color: var(--muted); font-weight: 600; font-size: 12.5px; letter-spacing: .4px; text-transform: uppercase; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+  .pill.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+  .pill.no { color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, transparent); }
+
+  /* ---------- How to ---------- */
+  .howto { max-width: 780px; display: grid; gap: 12px; }
+  .howto .card h3 { margin-bottom: 4px; }
+  .howto p { margin: 0; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 16px); background: var(--toast); color: var(--toast-ink);
+    padding: 10px 18px; border-radius: 8px; opacity: 0; pointer-events: none; transition: .2s; font-size: 14px; z-index: 50;
+    max-width: calc(100% - 32px);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 1080px) {
+    .form-layout, .coach-grid { grid-template-columns: 1fr; }
+    .preview-wrap { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @page { size: A4; margin: 0; }
+  @media print {
+    .topbar, .toolbar, .toast, #panel-form, #panel-coach, #panel-howto { display: none !important; }
+    main { padding: 0; }
+    #panel-resume { display: block !important; }
+    .page { box-shadow: none; margin: 0; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-row">
+      <div class="brand">Resume Builder<span>Internship resume · KPTM</span></div>
+      <button class="score-chip" id="scoreChip" type="button"><i></i><span id="scoreChipText">Score –</span></button>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-form" data-tab="form" aria-selected="true">Fill-In Form</button>
+      <button class="tab" role="tab" id="tab-resume" data-tab="resume" aria-selected="false">Resume</button>
+      <button class="tab" role="tab" id="tab-coach" data-tab="coach" aria-selected="false">Resume Coach</button>
+      <button class="tab" role="tab" id="tab-howto" data-tab="howto" aria-selected="false">How to Use</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- FORM -->
+  <section class="panel" id="panel-form">
+    <div class="toolbar">
+      <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
+      <button class="btn" type="button" data-action="docx">Download Word</button>
+      <span class="spacer"></span>
+      <span class="saved-state" id="savedState"></span>
+    </div>
+    <div class="notice" id="exampleNotice" hidden>
+      <p><b>This is an example resume.</b> Replace it with your own details, or start from an empty form.</p>
+      <button class="btn sm" type="button" data-action="clear-now">Start with an empty form</button>
+    </div>
+    <div class="form-layout">
+      <div>
+        <div class="notice">
+          <p>Type into the yellow boxes and the resume updates as you go. Leave a box empty to hide that line.
+            Boxes marked <b style="color:var(--bad)">*</b> are required. Your answers are saved in this browser only, so no one else can see them.</p>
+        </div>
+        <div class="section" style="padding:14px 16px">
+          <div class="field">
+            <label for="photoBtn">Photo (optional)</label>
+            <div class="photo-row">
+              <button class="btn sm" type="button" id="photoBtn" data-action="photo">Upload photo</button>
+              <button class="btn sm danger" type="button" data-action="photo-remove">Remove photo</button>
+              <label class="check" for="showPhoto"><input type="checkbox" id="showPhoto" checked> Show photo box on resume</label>
+            </div>
+            <div class="tip">Passport-style, formal attire, plain background.</div>
+          </div>
+        </div>
+        <div id="formRoot"></div>
+        <div class="toolbar" style="margin-top:6px">
+          <button class="btn sm ghost" type="button" data-action="backup">Save a backup file</button>
+          <button class="btn sm ghost" type="button" data-action="restore">Open a backup file</button>
+          <button class="btn sm ghost" type="button" data-action="sample">Load the example</button>
+          <button class="btn sm ghost danger" type="button" data-action="clear" id="clearBtn">Clear all</button>
+        </div>
+      </div>
+      <aside class="preview-wrap">
+        <div class="preview-head"><span>Live preview · A4</span><button class="btn sm" type="button" data-go="resume">Full size</button></div>
+        <div class="preview-box" id="previewBox"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section class="panel" id="panel-resume" hidden>
+    <div class="toolbar">
+      <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
+      <button class="btn" type="button" data-action="docx">Download Word</button>
+      <button class="btn ghost" type="button" data-go="form">Back to the form</button>
+    </div>
+    <div class="paper-scroll" id="paperFull"></div>
+  </section>
+
+  <!-- COACH -->
+  <section class="panel" id="panel-coach" hidden>
+    <div class="coach-grid">
+      <div class="card">
+        <h3>Smart suggestions by field</h3>
+        <div class="field">
+          <label for="fieldSelect">Target job field</label>
+          <select id="fieldSelect"></select>
+        </div>
+        <div class="sugg"><div class="sugg-head">Suggested summary <button class="btn sm" type="button" data-use="summary">Use this</button></div><p id="sgSummary"></p></div>
+        <div class="sugg"><div class="sugg-head">Suggested field skills <button class="btn sm" type="button" data-use="fieldSkills">Use this</button></div><p id="sgField"></p></div>
+        <div class="sugg"><div class="sugg-head">Suggested soft skills <button class="btn sm" type="button" data-use="softSkills">Use this</button></div><p id="sgSoft"></p></div>
+      </div>
+      <div class="card" id="scoreCard">
+        <h3>ATS &amp; quality score</h3>
+        <div class="score-big"><b id="scoreNum">0</b><span>/ 100</span></div>
+        <div class="score-msg" id="scoreMsg"></div>
+        <div class="meter" id="meter"></div>
+        <div class="meter-note" id="meterNote"></div>
+      </div>
+      <div class="card" style="grid-column:1/-1">
+        <h3>Checklist &amp; tips</h3>
+        <div class="table-scroll">
+          <table class="check">
+            <thead><tr><th>Check</th><th>Status</th><th>Tip to improve</th></tr></thead>
+            <tbody id="checkBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="panel" id="panel-howto" hidden>
+    <div class="howto">
+      <div class="card"><h3>1. Fill in your details</h3><p>On <b>Fill-In Form</b>, type into the yellow boxes. The grey tip under each box shows an example. Required boxes, including email, are marked *.</p></div>
+      <div class="card"><h3>2. Check your resume</h3><p>Open <b>Resume</b> to see the full A4 page. Then open <b>Resume Coach</b> and aim for a score of 80 or more before you send it.</p></div>
+      <div class="card"><h3>3. Add your photo</h3><p>Click <b>Upload photo</b> at the top of the form. If you prefer no photo, untick “Show photo box on resume”.</p></div>
+      <div class="card"><h3>4. Extra slots</h3><p>A 2nd job, a 3rd leadership role and a 4th achievement appear on the resume as soon as you fill them in. Empty lines are always hidden.</p></div>
+      <div class="card"><h3>5. Download</h3><p><b>Download PDF</b> gives a one-page A4 file that recruiters and ATS systems can read. <b>Download Word</b> gives an editable .docx file.</p></div>
+      <div class="card"><h3>Your work is saved</h3><p>Answers are saved automatically in this browser. To continue on another device, click <b>Save a backup file</b>, then <b>Open a backup file</b> on the other device.</p></div>
+    </div>
+  </section>
+</main>
+
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="jsonInput" accept=".json,application/json" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============ 1. Form definition (mirrors the Excel "Fill-In Form") ============ */
+  var SECTIONS = [
+    { title: "1 · Personal details", fields: [
+      ["name", "Full name", "As in IC, in CAPITAL letters", { req: 1 }],
+      ["location", "Location", "City, State only – no full home address"],
+      ["phone", "Phone", "+60 12-345 6789", { req: 1 }],
+      ["email", "Email", "Professional email, e.g. nur.aliyyah@gmail.com (not a nickname)", { req: 1 }],
+      ["linkedin", "LinkedIn / website", "linkedin.com/in/your-name"]
+    ]},
+    { title: "2 · Profile & internship target", fields: [
+      ["summary", "Profile summary", "2–3 sentences: programme, CGPA, strengths, proof. Do NOT write the 'Seeking…' sentence – it is added automatically from the boxes below.", { req: 1, area: 1 }],
+      ["role", "Internship role", "e.g. Human Resource / Admin / IT Support", { req: 1 }],
+      ["period", "Internship period", "e.g. 23 November 2026 to 26 February 2027", { req: 1 }],
+      ["aim", "Aim (optional)", "What you want to contribute, e.g. support recruitment and HR administration"]
+    ]},
+    { title: "3 · Education", fields: [
+      ["edu1", "Institution 1", "Latest college / university", { req: 1 }],
+      ["edu1Date", "Date", "Mon YYYY – Present", { sub: 1 }],
+      ["edu1Prog", "Programme & location", "Diploma in … – City, State", { sub: 1 }],
+      ["edu1Cgpa", "CGPA", "e.g. 3.71 (only if 3.00 and above)", { sub: 1 }],
+      ["edu1Hon", "Honours (optional)", "e.g. Dean's List (Semester 2 & 3)", { sub: 1 }],
+      ["edu1Courses", "Relevant courses", "3–5 courses related to the job, e.g. Recruitment & Selection, Employment Law", { sub: 1 }],
+      ["edu2", "Institution 2", "Secondary school", { gap: 1 }],
+      ["edu2Date", "Date", "YYYY – YYYY", { sub: 1 }],
+      ["edu2Qual", "Qualification & location", "e.g. Sijil Pelajaran Malaysia (SPM) – City, State", { sub: 1 }],
+      ["edu2Res", "Result", "e.g. 5A 3B", { sub: 1 }]
+    ]},
+    { title: "4 · Academic project", fields: [
+      ["proj", "Project title", "e.g. Employee Onboarding Plan for an SME"],
+      ["projDate", "Date", "Mon YYYY", { sub: 1 }],
+      ["projRole", "Course / your role", "e.g. Recruitment & Selection – Group Leader (4 members)", { sub: 1 }],
+      ["projB1", "Bullet 1", "What YOU did, start with a verb: 'Drafted a job ad and 15 interview questions…'", { sub: 1 }],
+      ["projB2", "Bullet 2", "The result, with a number: 'Scored 85%, highest in class'", { sub: 1 }]
+    ]},
+    { title: "5 · Work experience", fields: [
+      ["job1", "Job title 1", "Include part-time / seasonal jobs"],
+      ["job1Date", "Date", "Mon YYYY – Mon YYYY", { sub: 1 }],
+      ["job1Co", "Company / location", "Company Sdn Bhd – City, State", { sub: 1 }],
+      ["job1B1", "Bullet 1", "Verb + task + NUMBER + unit of time: 'Packed 500 containers per shift'", { sub: 1 }],
+      ["job1B2", "Bullet 2", "Teamwork / targets / procedures", { sub: 1 }],
+      ["job1B3", "Bullet 3", "Anything transferable: customers served, cash handled, trained new staff", { sub: 1 }],
+      ["job2", "Job title 2", "Optional – appears on the resume once filled", { gap: 1 }],
+      ["job2Date", "Date", "Mon YYYY – Mon YYYY", { sub: 1 }],
+      ["job2Co", "Company / location", "", { sub: 1 }],
+      ["job2B1", "Bullet 1", "", { sub: 1 }],
+      ["job2B2", "Bullet 2", "", { sub: 1 }],
+      ["job2B3", "Bullet 3", "", { sub: 1 }]
+    ]},
+    { title: "6 · Leadership & co-curricular", fields: [
+      ["lead1", "Role 1", "Position, Programme / Club, Institution. Add an English translation for Malay names."],
+      ["lead1Date", "Date", "Mon YYYY – Mon YYYY", { sub: 1 }],
+      ["lead1B1", "Bullet 1a", "e.g. Managed a programme budget of RM2,000 and prepared the financial report", { sub: 1 }],
+      ["lead1B2", "Bullet 1b", "e.g. Coordinated 12 committee members for 80 participants", { sub: 1 }],
+      ["lead2", "Role 2", "", { gap: 1 }],
+      ["lead2Date", "Date", "", { sub: 1 }],
+      ["lead2B1", "Bullet", "", { sub: 1 }],
+      ["lead3", "Role 3", "Optional – appears on the resume once filled", { gap: 1 }],
+      ["lead3Date", "Date", "", { sub: 1 }]
+    ]},
+    { title: "7 · Achievements", fields: [
+      ["ach1", "Achievement 1", "Placing / award – event name. Do NOT type the date here."],
+      ["ach1Date", "Date", "Mon YYYY, e.g. Aug 2025", { sub: 1 }],
+      ["ach2", "Achievement 2", "", { gap: 1 }],
+      ["ach2Date", "Date", "", { sub: 1 }],
+      ["ach3", "Achievement 3", "", { gap: 1 }],
+      ["ach3Date", "Date", "", { sub: 1 }],
+      ["ach4", "Achievement 4", "Optional – appears on the resume once filled", { gap: 1 }],
+      ["ach4Date", "Date", "", { sub: 1 }]
+    ]},
+    { title: "8 · Skills", fields: [
+      ["fieldSkills", "Field skills", "Job-related skills. Resume Coach suggests some for your field.", { area: 1 }],
+      ["techSkills", "Technical", "Software + level, e.g. Excel (pivot tables, VLOOKUP)", { req: 1, area: 1 }],
+      ["softSkills", "Soft skills", "4–6 skills you can prove elsewhere on the resume", { area: 1 }]
+    ]},
+    { title: "9 · Additional information", fields: [
+      ["languages", "Languages", "Add proof: English (MUET Band 3.5)"],
+      ["licence", "Licence & transport", "State the class: Own transport; Class D driving licence"],
+      ["reference", "Reference", "Keep as 'Available upon request'"]
+    ]}
+  ];
+
+  var SAMPLE = {
+    name: "NUR ALIYYAH BINTI MOHAMAD HANAPI", location: "Kulai, Johor", phone: "+60 13-916 6352", email: "",
+    linkedin: "linkedin.com/in/nur-aliyyah-8191513ba",
+    summary: "Final-semester Diploma in Human Resource Management student at KPTM Kuantan (CGPA 3.71) with a foundation in recruitment, employee relations and HR administration. Experienced in handling programme finances as a committee treasurer and in meeting daily targets in a fast-paced production team.",
+    role: "Human Resource", period: "23 November 2026 to 26 February 2027",
+    aim: "support recruitment, employee records and day-to-day HR operations",
+    edu1: "Kolej Poly-Tech MARA (KPTM) Kuantan", edu1Date: "Nov 2024 – Present",
+    edu1Prog: "Diploma in Human Resource Management – Kuantan, Pahang", edu1Cgpa: "3.71",
+    edu2: "SMK Tunku Abdul Rahman Putra", edu2Date: "2019 – 2023", edu2Qual: "Sijil Pelajaran Malaysia (SPM) – Kulai, Johor",
+    job1: "Packing Operator (Part-Time)", job1Date: "Aug 2024 – Nov 2024", job1Co: "GC Packaging Sdn Bhd – Kulai, Johor",
+    job1B1: "Packed and quality-checked approximately 500 food containers, bundling 150 pieces per package accurately and consistently.",
+    job1B2: "Worked with the production team to meet daily output targets while following standard operating procedures (SOP) and safety rules.",
+    lead1: "Treasurer, Program Khidmat Masyarakat (Community Service Programme), KPTM Kuantan", lead1Date: "Feb 2025 – Mar 2025",
+    lead2: "Member, Kelab Sukan dan Rekreasi (Sports & Recreation Club), KPTM Kuantan", lead2Date: "Nov 2024 – Present",
+    ach1: "2nd Place, Batu Seremban – Sukan Rakyat (SUKRA) KPTM 2025", ach1Date: "Aug 2025",
+    ach2: "3rd Place, Badminton – FESKO KPTM Kuantan", ach2Date: "Oct 2024",
+    fieldSkills: "Recruitment support (job ads, CV screening, interview scheduling), employee record keeping, HR documentation, basic knowledge of the Employment Act 1955",
+    techSkills: "Microsoft Word, Excel, PowerPoint (Advanced), Canva (Advanced), Google Workspace",
+    softSkills: "Teamwork, communication, attention to detail, organisation, time management",
+    languages: "Malay (Native), English (Intermediate)", licence: "Own transport; valid driving licence", reference: "Available upon request"
+  };
+
+  var FIELD_DATA = {
+    "Human Resource (HR)": {
+      summary: "Final-semester Diploma in Human Resource Management student with a strong grasp of recruitment, employee relations and HR administration. Organised, detail-oriented and eager to apply academic knowledge during an internship.",
+      field: "Recruitment support, CV screening, interview scheduling, employee record keeping, HR documentation, basic knowledge of the Employment Act 1955",
+      soft: "Teamwork, communication, confidentiality, attention to detail, organisation" },
+    "Admin / Clerical": {
+      summary: "Detail-oriented student skilled in office administration, data entry and document handling. Reliable, organised and comfortable with Microsoft Office, seeking an internship to support daily operations.",
+      field: "Data entry, filing & records management, scheduling, document preparation, basic accounting records",
+      soft: "Attention to detail, organisation, time management, communication, reliability" },
+    "Retail / Sales": {
+      summary: "Friendly and energetic student experienced in meeting daily targets and serving customers. Strong communication and teamwork skills, seeking a retail or sales internship to grow professionally.",
+      field: "Customer service, POS & cash handling, stock checking, product display, upselling",
+      soft: "Communication, teamwork, time management, problem solving, positive attitude" },
+    "IT Support": {
+      summary: "Tech-savvy student comfortable with troubleshooting, Microsoft Office and basic networking. A fast learner seeking an IT support internship to apply and expand practical skills.",
+      field: "Hardware & software troubleshooting, basic networking, OS installation, Microsoft Office support",
+      soft: "Problem solving, communication, patience, teamwork, fast learner" },
+    "General": {
+      summary: "Motivated final-semester student with strong communication, teamwork and organisational skills developed through academic projects and part-time work. Seeking an internship to gain hands-on experience.",
+      field: "Microsoft Office, data entry, report preparation, event coordination",
+      soft: "Communication, teamwork, time management, adaptability, initiative" }
+  };
+
+  /* ============ 2. State + browser save ============ */
+  var STORE_KEY = "kptm-resume-builder-v2";
+  var state = { data: {}, photo: "", showPhoto: true, isExample: false };
+  var ALL_KEYS = [], REQUIRED = {};
+  SECTIONS.forEach(function (s) { s.fields.forEach(function (f) {
+    ALL_KEYS.push(f[0]); if (f[3] && f[3].req) REQUIRED[f[0]] = true;
+  }); });
+
+  function $(id) { return document.getElementById(id); }
+  function v(k) { return String(state.data[k] || "").trim(); }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+  function persist() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      $("savedState").textContent = "Saved in this browser";
+    } catch (e) {
+      $("savedState").textContent = "Not saved – use “Save a backup file”";
+    }
+  }
+  function restoreLocal() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return false;
+      var s = JSON.parse(raw);
+      applyState(s);
+      return true;
+    } catch (e) { return false; }
+  }
+  function applyState(s) {
+    state.data = {};
+    ALL_KEYS.forEach(function (k) { if (s && s.data && typeof s.data[k] === "string") state.data[k] = s.data[k]; });
+    state.photo = (s && typeof s.photo === "string" && s.photo.indexOf("data:image/") === 0) ? s.photo : "";
+    state.showPhoto = !(s && s.showPhoto === false);
+    state.isExample = !!(s && s.isExample);
+  }
+
+  /* ============ 3. Build the form ============ */
+  function buildForm() {
+    var h = "";
+    SECTIONS.forEach(function (s, i) {
+      h += '<details class="section" open data-sec="' + i + '"><summary>' + esc(s.title) + '<span class="count"></span></summary><div class="section-body">';
+      s.fields.forEach(function (f) {
+        var k = f[0], o = f[3] || {};
+        h += '<div class="field' + (o.sub ? " sub" : "") + (o.gap ? " gap" : "") + '" data-wrap="' + k + '">';
+        h += '<label for="f_' + k + '">' + esc(f[1]) + (o.req ? '<span class="req">*</span>' : "") + "</label>";
+        if (o.area) h += '<textarea id="f_' + k + '" data-key="' + k + '" rows="3"></textarea>';
+        else h += '<input id="f_' + k + '" data-key="' + k + '" type="' + (k === "email" ? "email" : k === "phone" ? "tel" : "text") + '" autocomplete="off">';
+        if (f[2]) h += '<div class="tip">' + esc(f[2]) + "</div>";
+        h += "</div>";
+      });
+      h += "</div></details>";
+    });
+    $("formRoot").innerHTML = h;
+    $("formRoot").addEventListener("input", function (e) {
+      var k = e.target.getAttribute("data-key");
+      if (!k) return;
+      state.data[k] = e.target.value;
+      if (state.isExample) { state.isExample = false; }
+      schedule();
+    });
+  }
+  function fillForm() {
+    ALL_KEYS.forEach(function (k) { var el = $("f_" + k); if (el) el.value = state.data[k] || ""; });
+    $("showPhoto").checked = state.showPhoto;
+  }
+
+  /* ============ 4. Resume model (one source for screen, PDF and Word) ============ */
+  function joinNon(parts, sep) { return parts.filter(function (p) { return p; }).join(sep); }
+  function profileText() {
+    var t = v("summary");
+    if (v("role")) {
+      t += " Seeking a " + v("role") + " internship";
+      if (v("period")) t += " from " + v("period");
+      if (v("aim")) t += " to " + v("aim");
+      t += ".";
+    }
+    return t.trim();
+  }
+  function buildModel() {
+    var m = {
+      name: v("name"),
+      contact: [joinNon([v("location"), v("phone")], "   |   "), v("email"), v("linkedin")].filter(Boolean),
+      photo: state.showPhoto ? (state.photo || "placeholder") : "",
+      sections: []
+    };
+    function sec(title, items) { if (items.length) m.sections.push({ title: title, items: items }); }
+    function bullets(keys, arr) { keys.forEach(function (k) { if (v(k)) arr.push({ k: "bullet", t: v(k) }); }); }
+
+    var p = profileText();
+    sec("PROFILE", p ? [{ k: "text", t: p }] : []);
+
+    var edu = [];
+    if (v("edu1") || v("edu1Prog")) {
+      edu.push({ k: "row", t: v("edu1"), d: v("edu1Date") });
+      var e1 = joinNon([v("edu1Prog"), v("edu1Cgpa") ? "CGPA: " + v("edu1Cgpa") : "", v("edu1Hon")], "  |  ");
+      if (e1) edu.push({ k: "sub", t: e1 });
+      if (v("edu1Courses")) edu.push({ k: "sub", t: "Relevant courses: " + v("edu1Courses") });
+    }
+    if (v("edu2") || v("edu2Qual")) {
+      edu.push({ k: "row", t: v("edu2"), d: v("edu2Date") });
+      var e2 = joinNon([v("edu2Qual"), v("edu2Res") ? "Result: " + v("edu2Res") : ""], "  |  ");
+      if (e2) edu.push({ k: "sub", t: e2 });
+    }
+    sec("EDUCATION", edu);
+
+    var pj = [];
+    if (v("proj")) {
+      pj.push({ k: "row", t: v("proj"), d: v("projDate") });
+      if (v("projRole")) pj.push({ k: "sub", t: v("projRole") });
+      bullets(["projB1", "projB2"], pj);
+    }
+    sec("ACADEMIC PROJECT", pj);
+
+    var work = [];
+    ["job1", "job2"].forEach(function (j) {
+      if (!v(j)) return;
+      work.push({ k: "row", t: v(j), d: v(j + "Date") });
+      if (v(j + "Co")) work.push({ k: "sub", t: v(j + "Co") });
+      bullets([j + "B1", j + "B2", j + "B3"], work);
+    });
+    sec("WORK EXPERIENCE", work);
+
+    var lead = [];
+    [["lead1", ["lead1B1", "lead1B2"]], ["lead2", ["lead2B1"]], ["lead3", []]].forEach(function (L) {
+      if (!v(L[0])) return;
+      lead.push({ k: "row", t: v(L[0]), d: v(L[0] + "Date"), nb: true });
+      bullets(L[1], lead);
+    });
+    sec("CO-CURRICULAR ACTIVITIES", lead);
+
+    var ach = [];
+    ["ach1", "ach2", "ach3", "ach4"].forEach(function (a) { if (v(a)) ach.push({ k: "ach", t: v(a), d: v(a + "Date") }); });
+    sec("ACHIEVEMENTS", ach);
+
+    var sk = [];
+    [["Field skills", "fieldSkills"], ["Technical", "techSkills"], ["Soft skills", "softSkills"]].forEach(function (x) {
+      if (v(x[1])) sk.push({ k: "label", l: x[0], t: v(x[1]) });
+    });
+    sec("SKILLS", sk);
+
+    var add = [];
+    [["Languages", "languages"], ["Licence & Transport", "licence"], ["Reference", "reference"]].forEach(function (x) {
+      if (v(x[1])) add.push({ k: "label", l: x[0], t: v(x[1]) });
+    });
+    sec("ADDITIONAL INFORMATION", add);
+    return m;
+  }
+
+  function modelToHTML(m) {
+    var h = '<div class="page"><div class="r-head"><div>';
+    h += '<h1 class="r-name">' + esc(m.name || "YOUR FULL NAME") + '</h1><div class="r-contact">';
+    m.contact.forEach(function (c) { h += "<div>" + esc(c) + "</div>"; });
+    h += "</div></div>";
+    if (m.photo) h += '<div class="r-photo">' + (m.photo === "placeholder" ? "PHOTO" : '<img src="' + m.photo + '" alt="">') + "</div>";
+    h += "</div>";
+    m.sections.forEach(function (s) {
+      h += '<div class="r-sec"><h2>' + esc(s.title) + "</h2>";
+      s.items.forEach(function (it) {
+        if (it.k === "row") h += '<div class="r-row' + (it.nb ? " nobold" : "") + '"><span class="t">' + esc(it.t) + '</span><span class="d">' + esc(it.d || "") + "</span></div>";
+        else if (it.k === "ach") h += '<div class="r-row plain"><span class="t">' + esc(it.t) + '</span><span class="d">' + esc(it.d || "") + "</span></div>";
+        else if (it.k === "sub") h += '<div class="r-sub">' + esc(it.t) + "</div>";
+        else if (it.k === "bullet") h += '<div class="r-bul">' + esc(it.t) + "</div>";
+        else if (it.k === "text") h += '<div class="r-text">' + esc(it.t) + "</div>";
+        else if (it.k === "label") h += '<div class="r-label"><b>' + esc(it.l) + ":</b> " + esc(it.t) + "</div>";
+      });
+      h += "</div>";
+    });
+    return h + "</div>";
+  }
+
+  /* ============ 5. Resume Coach (same 16 checks as the Excel) ============ */
+  var MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  var CHECKS = [
+    ["Full name is filled in", "Add your full name at the top.", function () { return !!v("name"); }],
+    ["Contact number is present", "Add a phone number recruiters can reach.", function () { return !!v("phone"); }],
+    ["Professional email added", "Email is REQUIRED – employers reply by email. Use a professional address.", function () { return v("email").indexOf("@") > -1; }],
+    ["LinkedIn profile added", "Create a free LinkedIn profile and paste the link.", function () { return !!v("linkedin"); }],
+    ["Profile summary is detailed (150+ characters)", "Write 2–3 sentences: programme, CGPA, strengths and proof.", function () { return (state.data.summary || "").length >= 150; }],
+    ["Internship role & period stated", "State the internship role AND the exact dates.", function () { return !!(v("role") && v("period")); }],
+    ["Education with CGPA", "Add your college and CGPA.", function () { return !!(v("edu1") && v("edu1Cgpa")); }],
+    ["Relevant courses listed", "List 3–5 courses related to the job you want.", function () { return !!v("edu1Courses"); }],
+    ["Academic project added", "Add one project – your best proof of skills without work experience.", function () { return !!v("proj"); }],
+    ["Work / part-time experience added", "Add any job, part-time, seasonal or family-business work.", function () { return !!v("job1"); }],
+    ["Leadership / co-curricular role added", "Add a committee role, club or programme you joined.", function () { return !!v("lead1"); }],
+    ["Achievement listed", "Add an award, placing or recognition.", function () { return !!v("ach1"); }],
+    ["Achievement names have no stray dates", "Move months out of the Achievement box into its Date box.", function () {
+      var t = (v("ach1") + " " + v("ach2") + " " + v("ach3") + " " + v("ach4") + " ").toLowerCase();
+      return !MONTHS.some(function (mo) { return t.indexOf(mo + " ") > -1; });
+    }],
+    ["Field & soft skills listed", "Add job-related skills and soft skills (see the suggestions).", function () { return !!(v("fieldSkills") && v("softSkills")); }],
+    ["Has a measurable result (number)", "Add a number to a bullet, e.g. 'packed 500 units per shift', 'managed RM2,000 budget'.", function () {
+      return /[0-9]/.test(["job1B1", "job1B2", "job1B3", "projB1", "projB2", "lead1B1", "lead1B2", "lead2B1"].map(v).join(""));
+    }],
+    ["English level has proof (MUET / IELTS)", "Add your MUET band, e.g. English (MUET Band 3.5).", function () { return /muet|ielts|band/i.test(v("languages")); }]
+  ];
+
+  function renderCoach() {
+    var passed = 0, rows = "", meter = "";
+    CHECKS.forEach(function (c) {
+      var ok = c[2](); if (ok) passed++;
+      rows += "<tr><td>" + esc(c[0]) + "</td><td>" + (ok ? '<span class="pill ok">✔ Done</span>' : '<span class="pill no">✗ Improve</span>') +
+        "</td><td>" + (ok ? "—" : esc(c[1])) + "</td></tr>";
+    });
+    for (var i = 0; i < CHECKS.length; i++) meter += '<i class="' + (i < passed ? "on" : "") + '"></i>';
+    var score = Math.round(passed / CHECKS.length * 100);
+    var tone = score >= 80 ? ["Excellent – ready to send!", "var(--ok)"] : score >= 60 ? ["Good – a few tweaks needed", "var(--info)"] :
+      score >= 40 ? ["Needs work", "var(--warn)"] : ["Just getting started", "var(--bad)"];
+    $("checkBody").innerHTML = rows;
+    $("scoreNum").textContent = score;
+    $("scoreMsg").textContent = tone[0];
+    $("meter").innerHTML = meter;
+    $("meterNote").textContent = passed + " of " + CHECKS.length + " checks passed · aim for 80 or more";
+    $("scoreCard").style.setProperty("--c", tone[1]);
+    $("scoreChip").style.setProperty("--c", score >= 80 ? "#6fdc9a" : score >= 60 ? "#8cc3ff" : score >= 40 ? "#f3c16b" : "#ff9b8f");
+    $("scoreChipText").textContent = "Score " + score + " / 100";
+  }
+  function buildFieldSelect() {
+    $("fieldSelect").innerHTML = Object.keys(FIELD_DATA).map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + "</option>"; }).join("");
+    $("fieldSelect").addEventListener("change", renderSuggestions);
+    renderSuggestions();
+  }
+  function renderSuggestions() {
+    var d = FIELD_DATA[$("fieldSelect").value];
+    $("sgSummary").textContent = d.summary; $("sgField").textContent = d.field; $("sgSoft").textContent = d.soft;
+  }
+
+  /* ============ 6. Render loop ============ */
+  var timer = null;
+  function schedule() { clearTimeout(timer); timer = setTimeout(function () { render(); persist(); }, 120); }
+  function render() {
+    var html = modelToHTML(buildModel());
+    $("paperFull").innerHTML = html;
+    $("previewBox").innerHTML = html;
+    fitPreview();
+    renderCoach();
+    Object.keys(REQUIRED).forEach(function (k) {
+      var w = document.querySelector('[data-wrap="' + k + '"]'); if (w) w.classList.toggle("missing", !v(k));
+    });
+    document.querySelectorAll("details.section").forEach(function (d) {
+      var s = SECTIONS[+d.getAttribute("data-sec")];
+      var filled = s.fields.filter(function (f) { return v(f[0]); }).length;
+      d.querySelector(".count").textContent = filled + " / " + s.fields.length + " filled";
+    });
+    $("exampleNotice").hidden = !state.isExample;
+  }
+  function fitPreview() {
+    var box = $("previewBox"), page = box.querySelector(".page");
+    if (!page || !box.clientWidth) return;
+    var scale = (box.clientWidth - 24) / page.offsetWidth;
+    page.style.transform = "scale(" + scale + ")";
+    page.style.marginBottom = -(page.offsetHeight * (1 - scale)) + "px";
+  }
+
+  /* ============ 7. Files: libraries, save, PDF, Word ============ */
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, 2600);
+  }
+  var libs = {};
+  function loadScript(url) {
+    if (libs[url]) return libs[url];
+    libs[url] = new Promise(function (res, rej) {
+      var s = document.createElement("script"); s.src = url; s.onload = res;
+      s.onerror = function () { delete libs[url]; rej(new Error("load")); };
+      document.head.appendChild(s);
+    });
+    return libs[url];
+  }
+  var dlPromise = null;
+  function getDownloads() {
+    if (!dlPromise) {
+      dlPromise = (window.claude && typeof window.claude.use === "function")
+        ? window.claude.use("downloads").catch(function () { return null; }) : Promise.resolve(null);
+    }
+    return dlPromise;
+  }
+  function saveFile(filename, blob) {
+    return getDownloads().then(function (dl) {
+      if (dl) {
+        return dl.save({ filename: filename, data: blob }).then(function () { toast("Saved " + filename); }, function (err) {
+          var code = err && err.code;
+          if (code === "declined") toast("Download cancelled");
+          else if (code === "rate_limited") toast("A download is already waiting for you – check the prompt");
+          else toast("This file can't be saved here. Try again from the full artifact page.");
+        });
+      }
+      // Standalone copy of the page: ordinary browser download
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = filename;
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+      toast("Saved " + filename);
+    });
+  }
+  function fileBase() {
+    var n = v("name").replace(/[^A-Za-z0-9 ]/g, "").trim().split(/\s+/).filter(Boolean).slice(0, 3).join("_");
+    return (n || "My") + "_Resume";
+  }
+  function busy(action, on) {
+    document.querySelectorAll('[data-action="' + action + '"]').forEach(function (b) {
+      b.disabled = on;
+      if (on) { b._t = b.textContent; b.textContent = "Preparing…"; } else if (b._t) b.textContent = b._t;
+    });
+  }
+
+  /* --- PDF: real, selectable text (ATS-friendly), drawn with jsPDF --- */
+  function makePDF() {
+    var m = buildModel();
+    var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4" });
+    var W = 210, H = 297, ML = 14, MR = 14, MT = 12.7, MB = 12.7, CW = W - ML - MR;
+    var PT = 0.3528, y = MT;
+    var NAVY = [31, 56, 100], DARK = [17, 17, 17], GREY = [51, 51, 51];
+
+    function lh(size) { return size * PT * 1.28; }
+    function ensure(h) { if (y + h > H - MB) { doc.addPage(); y = MT; } }
+    function set(size, style, color) { doc.setFont("helvetica", style); doc.setFontSize(size); doc.setTextColor(color[0], color[1], color[2]); }
+    function para(text, x, width, size, style, color, align) {
+      set(size, style, color);
+      var lines = doc.splitTextToSize(text, width);
+      lines.forEach(function (ln, i) {
+        ensure(lh(size));
+        var isLast = i === lines.length - 1;
+        if (align === "justify" && !isLast) doc.text(ln, x, y + size * PT * 0.95, { maxWidth: width, align: "justify" });
+        else doc.text(ln, x, y + size * PT * 0.95);
+        y += lh(size);
+      });
+    }
+
+    // Header
+    var photoW = 30, photoH = 38, textW = m.photo ? CW - photoW - 6 : CW, top = y;
+    para(m.name || "YOUR FULL NAME", ML, textW, 18, "bold", NAVY);
+    y += 1;
+    m.contact.forEach(function (c) { para(c, ML, textW, 9.5, "normal", GREY); });
+    if (m.photo) {
+      if (m.photo === "placeholder") {
+        doc.setDrawColor(201, 205, 212); doc.setFillColor(230, 232, 236);
+        doc.rect(W - MR - photoW, top, photoW, photoH, "FD");
+        set(8, "normal", [138, 143, 153]); doc.text("PHOTO", W - MR - photoW / 2, top + photoH / 2, { align: "center" });
+      } else {
+        try { doc.addImage(m.photo, "JPEG", W - MR - photoW, top, photoW, photoH); } catch (e) {}
+      }
+      y = Math.max(y, top + photoH);
+    }
+
+    m.sections.forEach(function (s) {
+      y += 3.2;
+      ensure(lh(10.5) + 8);
+      set(10.5, "bold", NAVY);
+      doc.text(s.title, ML, y + 10.5 * PT * 0.95);
+      y += lh(10.5) + 0.6;
+      doc.setDrawColor(NAVY[0], NAVY[1], NAVY[2]); doc.setLineWidth(0.4); doc.line(ML, y, W - MR, y);
+      y += 1.8;
+      var prevKind = null;
+      s.items.forEach(function (it) {
+        if (it.k === "row" || it.k === "ach") {
+          if (it.k === "row" && prevKind && prevKind !== "row") y += 1.6;
+          var size = 10;
+          set(size, "italic", GREY);
+          var dw = it.d ? doc.getTextWidth(it.d) : 0;
+          var bx = it.k === "ach" ? ML + 4.5 : ML;
+          var tw = CW - dw - 5 - (bx - ML);
+          set(size, (it.k === "ach" || it.nb) ? "normal" : "bold", DARK);
+          var lines = doc.splitTextToSize(it.t, tw);
+          ensure(lh(size) * lines.length);
+          var baseY = y + size * PT * 0.95;
+          if (it.k === "ach") doc.text("•", ML + 1, baseY);
+          lines.forEach(function (ln, i) { doc.text(ln, bx, y + size * PT * 0.95 + i * lh(size)); });
+          if (it.d) { set(size, "italic", GREY); doc.text(it.d, W - MR, baseY, { align: "right" }); }
+          y += lh(size) * lines.length;
+        } else if (it.k === "sub") {
+          para(it.t, ML, CW, 10, "normal", GREY);
+        } else if (it.k === "text") {
+          para(it.t, ML, CW, 10, "normal", DARK, "justify");
+        } else if (it.k === "bullet") {
+          set(10, "normal", DARK);
+          var bl = doc.splitTextToSize(it.t, CW - 5);
+          ensure(lh(10));
+          doc.text("•", ML + 1.2, y + 10 * PT * 0.95);
+          bl.forEach(function (ln) { ensure(lh(10)); doc.text(ln, ML + 5, y + 10 * PT * 0.95); y += lh(10); });
+        } else if (it.k === "label") {
+          var label = it.l + ":";
+          set(10, "bold", DARK);
+          var lw = doc.getTextWidth(label) + 1.4;
+          set(10, "normal", DARK);
+          // First line shares space with the bold label
+          var words = it.t.split(/\s+/), first = "", rest;
+          while (words.length && doc.getTextWidth((first ? first + " " : "") + words[0]) <= CW - lw) first += (first ? " " : "") + words.shift();
+          rest = words.join(" ");
+          ensure(lh(10));
+          set(10, "bold", DARK); doc.text(label, ML, y + 10 * PT * 0.95);
+          set(10, "normal", DARK); doc.text(first, ML + lw, y + 10 * PT * 0.95);
+          y += lh(10);
+          if (rest) para(rest, ML, CW, 10, "normal", DARK);
+        }
+        prevKind = it.k;
+      });
+    });
+    return doc.output("blob");
+  }
+
+  /* --- Word (.docx) built with the docx library --- */
+  function b64ToBytes(dataUrl) {
+    var b = atob(dataUrl.split(",")[1]), u = new Uint8Array(b.length);
+    for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+    return u;
+  }
+  function makeDOCX() {
+    var D = window.docx, m = buildModel();
+    var FONT = "Calibri", NAVY = "1F3864", GREY = "333333";
+    var CONTENT_TW = Math.round((210 - 28) / 25.4 * 1440); // twips
+    function run(text, o) { o = o || {}; return new D.TextRun({ text: text, font: FONT, size: o.size || 21, bold: !!o.bold, italics: !!o.italic, color: o.color || "111111" }); }
+    var kids = [];
+
+    var headParas = [new D.Paragraph({ spacing: { after: 60 }, children: [run(m.name || "YOUR FULL NAME", { size: 36, bold: true, color: NAVY })] })];
+    m.contact.forEach(function (c) { headParas.push(new D.Paragraph({ spacing: { after: 0 }, children: [run(c, { size: 20, color: GREY })] })); });
+
+    if (m.photo && m.photo !== "placeholder") {
+      var none = { style: D.BorderStyle.NONE, size: 0, color: "FFFFFF" };
+      kids.push(new D.Table({
+        width: { size: CONTENT_TW, type: D.WidthType.DXA },
+        columnWidths: [CONTENT_TW - 1800, 1800],
+        borders: { top: none, bottom: none, left: none, right: none, insideHorizontal: none, insideVertical: none },
+        rows: [new D.TableRow({ children: [
+          new D.TableCell({ width: { size: CONTENT_TW - 1800, type: D.WidthType.DXA }, borders: { top: none, bottom: none, left: none, right: none }, children: headParas }),
+          new D.TableCell({ width: { size: 1800, type: D.WidthType.DXA }, borders: { top: none, bottom: none, left: none, right: none }, children: [
+            new D.Paragraph({ alignment: D.AlignmentType.RIGHT, children: [new D.ImageRun({ data: b64ToBytes(m.photo), transformation: { width: 113, height: 144 } })] })
+          ] })
+        ] })]
+      }));
+    } else {
+      headParas.forEach(function (p) { kids.push(p); });
+    }
+
+    var tab = [{ type: D.TabStopType.RIGHT, position: CONTENT_TW }];
+    m.sections.forEach(function (s) {
+      kids.push(new D.Paragraph({
+        spacing: { before: 200, after: 80 },
+        border: { bottom: { style: D.BorderStyle.SINGLE, size: 10, color: NAVY, space: 1 } },
+        children: [run(s.title, { size: 22, bold: true, color: NAVY })]
+      }));
+      var prev = null;
+      s.items.forEach(function (it) {
+        if (it.k === "row" || it.k === "ach") {
+          var ch = [];
+          if (it.k === "ach") ch.push(run("•  "));
+          ch.push(run(it.t, { bold: it.k === "row" && !it.nb }));
+          if (it.d) { ch.push(new D.TextRun({ text: "\t", font: FONT })); ch.push(run(it.d, { italic: true, color: GREY })); }
+          kids.push(new D.Paragraph({ tabStops: tab, spacing: { before: (it.k === "row" && prev && prev !== "row") ? 100 : 0, after: 0 }, children: ch }));
+        } else if (it.k === "sub") {
+          kids.push(new D.Paragraph({ spacing: { after: 0 }, children: [run(it.t, { color: GREY })] }));
+        } else if (it.k === "text") {
+          kids.push(new D.Paragraph({ alignment: D.AlignmentType.JUSTIFIED, spacing: { after: 0 }, children: [run(it.t)] }));
+        } else if (it.k === "bullet") {
+          kids.push(new D.Paragraph({ bullet: { level: 0 }, spacing: { after: 0 }, children: [run(it.t)] }));
+        } else if (it.k === "label") {
+          kids.push(new D.Paragraph({ spacing: { after: 0 }, children: [run(it.l + ": ", { bold: true }), run(it.t)] }));
+        }
+        prev = it.k;
+      });
+    });
+
+    var d = new D.Document({
+      creator: "Resume Builder",
+      styles: { default: { document: { run: { font: FONT, size: 21 } } } },
+      sections: [{
+        properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 720, bottom: 720, left: 794, right: 794 } } },
+        children: kids
+      }]
+    });
+    return D.Packer.toBlob(d);
+  }
+
+  var JSPDF_URL = "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
+  var DOCX_URL = "https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js";
+
+  function doPDF() {
+    busy("pdf", true);
+    loadScript(JSPDF_URL).then(function () { return saveFile(fileBase() + ".pdf", makePDF()); })
+      .catch(function () { toast("The PDF tool couldn't load. Check your internet connection and try again."); })
+      .then(function () { busy("pdf", false); });
+  }
+  function doDOCX() {
+    busy("docx", true);
+    loadScript(DOCX_URL).then(makeDOCX).then(function (blob) { return saveFile(fileBase() + ".docx", blob); })
+      .catch(function () { toast("The Word tool couldn't load. Check your internet connection and try again."); })
+      .then(function () { busy("docx", false); });
+  }
+  function doBackup() {
+    var payload = JSON.stringify({ app: "resume-builder", version: 2, data: state.data, photo: state.photo, showPhoto: state.showPhoto }, null, 2);
+    saveFile(fileBase() + "_backup.json", new Blob([payload], { type: "application/json" }));
+  }
+  function doRestore(file) {
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var p = JSON.parse(r.result);
+        if (!p || typeof p.data !== "object") throw new Error("shape");
+        applyState({ data: p.data, photo: p.photo, showPhoto: p.showPhoto, isExample: false });
+        fillForm(); render(); persist(); toast("Backup opened");
+      } catch (e) { toast("That file isn't a Resume Builder backup. Choose the .json file you saved."); }
+    };
+    r.readAsText(file);
+  }
+  function doPhoto(file) {
+    if (!file || !/^image\//.test(file.type)) { toast("Choose an image file (JPG or PNG)."); return; }
+    var r = new FileReader();
+    r.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var Wp = 360, Hp = 456, cv = document.createElement("canvas");
+        cv.width = Wp; cv.height = Hp;
+        var ctx = cv.getContext("2d"), s = Math.max(Wp / img.width, Hp / img.height);
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, Wp, Hp);
+        ctx.drawImage(img, (Wp - img.width * s) / 2, (Hp - img.height * s) / 2, img.width * s, img.height * s);
+        state.photo = cv.toDataURL("image/jpeg", 0.86);
+        state.showPhoto = true; $("showPhoto").checked = true;
+        render(); persist(); toast("Photo added");
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  }
+
+  /* ============ 8. Tabs + events ============ */
+  function switchTab(name) {
+    document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t.getAttribute("data-tab") === name ? "true" : "false"); });
+    document.querySelectorAll(".panel").forEach(function (p) { p.hidden = p.id !== "panel-" + name; });
+    window.scrollTo(0, 0);
+    if (name === "form") fitPreview();
+    try { sessionStorage.setItem(STORE_KEY + "-tab", name); } catch (e) {}
+  }
+  function clearAll() {
+    state.data = {}; state.photo = ""; state.isExample = false;
+    fillForm(); render(); persist(); toast("Form cleared");
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-tab],[data-go],[data-action],[data-use]");
+    if (!t) return;
+    var tab = t.getAttribute("data-tab") || t.getAttribute("data-go");
+    if (tab) { switchTab(tab); return; }
+    var use = t.getAttribute("data-use");
+    if (use) {
+      var d = FIELD_DATA[$("fieldSelect").value];
+      state.data[use] = use === "summary" ? d.summary : use === "fieldSkills" ? d.field : d.soft;
+      state.isExample = false;
+      fillForm(); render(); persist(); toast("Added to your form");
+      return;
+    }
+    switch (t.getAttribute("data-action")) {
+      case "pdf": doPDF(); break;
+      case "docx": doDOCX(); break;
+      case "backup": doBackup(); break;
+      case "restore": $("jsonInput").click(); break;
+      case "photo": $("photoInput").click(); break;
+      case "photo-remove": state.photo = ""; render(); persist(); toast("Photo removed"); break;
+      case "sample":
+        applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), photo: "", showPhoto: true, isExample: true });
+        fillForm(); render(); persist(); toast("Example loaded");
+        break;
+      case "clear-now": clearAll(); break;
+      case "clear":
+        if (!t._armed) {
+          t._armed = true; t.textContent = "Click again to clear everything";
+          setTimeout(function () { t._armed = false; t.textContent = "Clear all"; }, 3500);
+          return;
+        }
+        t._armed = false; t.textContent = "Clear all"; clearAll();
+        break;
+    }
+  });
+  $("scoreChip").addEventListener("click", function () { switchTab("coach"); });
+  $("showPhoto").addEventListener("change", function (e) { state.showPhoto = e.target.checked; render(); persist(); });
+  $("photoInput").addEventListener("change", function (e) { doPhoto(e.target.files[0]); e.target.value = ""; });
+  $("jsonInput").addEventListener("change", function (e) { if (e.target.files[0]) doRestore(e.target.files[0]); e.target.value = ""; });
+  window.addEventListener("resize", fitPreview);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitPreview);
+
+  /* ============ 9. Start ============ */
+  buildForm();
+  buildFieldSelect();
+  if (!restoreLocal()) applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), isExample: true });
+  fillForm();
+  render();
+  var lastTab = null;
+  try { lastTab = sessionStorage.getItem(STORE_KEY + "-tab"); } catch (e) {}
+  if (lastTab && $("panel-" + lastTab)) switchTab(lastTab);
+})();
+</script>
+
+</body></html>
