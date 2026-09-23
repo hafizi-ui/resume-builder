@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>KPTM Resume Builder</title><meta name="description" content="Internship resume builder for KPTM students"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>ResumeGo</title><meta name="description" content="Internship resume builder for KPTM students"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
@@ -259,7 +259,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand-row">
-      <div class="brand">Resume Builder<span>Internship resume · KPTM</span></div>
+      <div class="brand">ResumeGo<span>Internship resume · KPTM</span></div>
       <button class="score-chip" id="scoreChip" type="button"><i></i><span id="scoreChipText">Score –</span></button>
     </div>
     <nav class="tabs" role="tablist">
@@ -277,8 +277,12 @@
     <div class="toolbar">
       <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
       <button class="btn" type="button" data-action="docx">Download Word</button>
+      <button class="btn ghost" type="button" data-action="print">Print / Save as PDF</button>
       <span class="spacer"></span>
       <span class="saved-state" id="savedState"></span>
+    </div>
+    <div class="notice" id="dlNotice" hidden style="border-color:var(--warn)">
+      <p><b>Download is not available in this browser view.</b> Open the link in <b>Chrome or Safari</b> (not inside WhatsApp, Telegram or Instagram) and sign in to Claude. You can also use <b>Print / Save as PDF</b> and choose “Save as PDF”.</p>
     </div>
     <div class="notice" id="exampleNotice" hidden>
       <p><b>This is an example resume.</b> Replace it with your own details, or start from an empty form.</p>
@@ -321,6 +325,7 @@
     <div class="toolbar">
       <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
       <button class="btn" type="button" data-action="docx">Download Word</button>
+      <button class="btn ghost" type="button" data-action="print">Print / Save as PDF</button>
       <button class="btn ghost" type="button" data-go="form">Back to the form</button>
     </div>
     <div class="paper-scroll" id="paperFull"></div>
@@ -461,25 +466,35 @@
   ];
 
   var SAMPLE = {
-    name: "NUR ALIYYAH BINTI MOHAMAD HANAPI", location: "Kulai, Johor", phone: "+60 13-916 6352", email: "",
+    name: "NUR ALIYYAH BINTI MOHAMAD HANAPI", location: "Kulai, Johor", phone: "+60 13-916 6352", email: "nur.aliyyah.hanapi@gmail.com",
     linkedin: "linkedin.com/in/nur-aliyyah-8191513ba",
     summary: "Final-semester Diploma in Human Resource Management student at KPTM Kuantan (CGPA 3.71) with a foundation in recruitment, employee relations and HR administration. Experienced in handling programme finances as a committee treasurer and in meeting daily targets in a fast-paced production team.",
     role: "Human Resource", period: "23 November 2026 to 26 February 2027",
     aim: "support recruitment, employee records and day-to-day HR operations",
     edu1: "Kolej Poly-Tech MARA (KPTM) Kuantan", edu1Date: "Nov 2024 – Present",
     edu1Prog: "Diploma in Human Resource Management – Kuantan, Pahang", edu1Cgpa: "3.71",
+    edu1Hon: "Dean's List (Semester 2 & 3)",
+    edu1Courses: "Recruitment & Selection, Employment Law, Industrial Relations, Compensation Management, HR Information Systems",
+    edu2Res: "5A 3B",
+    proj: "Employee Onboarding Plan for an SME", projDate: "Jun 2025",
+    projRole: "Recruitment & Selection – Group Leader (4 members)",
+    projB1: "Drafted a job advertisement, 15 structured interview questions and a 5-day onboarding checklist for a 30-staff SME.",
+    projB2: "Led a team of 4 to present the plan to the lecturer panel and scored 85%, the highest in class.",
     edu2: "SMK Tunku Abdul Rahman Putra", edu2Date: "2019 – 2023", edu2Qual: "Sijil Pelajaran Malaysia (SPM) – Kulai, Johor",
     job1: "Packing Operator (Part-Time)", job1Date: "Aug 2024 – Nov 2024", job1Co: "GC Packaging Sdn Bhd – Kulai, Johor",
     job1B1: "Packed and quality-checked approximately 500 food containers, bundling 150 pieces per package accurately and consistently.",
     job1B2: "Worked with the production team to meet daily output targets while following standard operating procedures (SOP) and safety rules.",
+    job1B3: "Trained 3 new part-time staff on packing procedures and quality checks during peak production weeks.",
     lead1: "Treasurer, Program Khidmat Masyarakat (Community Service Programme), KPTM Kuantan", lead1Date: "Feb 2025 – Mar 2025",
+    lead1B1: "Managed a programme budget of RM2,000, recorded all expenses and prepared the final financial report.",
+    lead1B2: "Coordinated with 12 committee members to run the programme for 80 participants.",
     lead2: "Member, Kelab Sukan dan Rekreasi (Sports & Recreation Club), KPTM Kuantan", lead2Date: "Nov 2024 – Present",
     ach1: "2nd Place, Batu Seremban – Sukan Rakyat (SUKRA) KPTM 2025", ach1Date: "Aug 2025",
     ach2: "3rd Place, Badminton – FESKO KPTM Kuantan", ach2Date: "Oct 2024",
     fieldSkills: "Recruitment support (job ads, CV screening, interview scheduling), employee record keeping, HR documentation, basic knowledge of the Employment Act 1955",
     techSkills: "Microsoft Word, Excel, PowerPoint (Advanced), Canva (Advanced), Google Workspace",
     softSkills: "Teamwork, communication, attention to detail, organisation, time management",
-    languages: "Malay (Native), English (Intermediate)", licence: "Own transport; valid driving licence", reference: "Available upon request"
+    languages: "Malay (Native), English (Intermediate – MUET Band 3.5)", licence: "Own transport; Class D driving licence", reference: "Available upon request"
   };
 
   var FIELD_DATA = {
@@ -530,6 +545,7 @@
       var raw = localStorage.getItem(STORE_KEY);
       if (!raw) return false;
       var s = JSON.parse(raw);
+      if (s && s.isExample) return false; // untouched example: show the latest version
       applyState(s);
       return true;
     } catch (e) { return false; }
@@ -762,7 +778,7 @@
   /* ============ 7. Files: libraries, save, PDF, Word ============ */
   function toast(msg) {
     var t = $("toast"); t.textContent = msg; t.classList.add("show");
-    clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, 2600);
+    clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, msg.length > 60 ? 7000 : 2600);
   }
   var libs = {};
   function loadScript(url) {
@@ -782,6 +798,9 @@
     }
     return dlPromise;
   }
+  var IN_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
+  var DL_HELP = "Download isn't available here. Open the link in Chrome or Safari and sign in, or use Print / Save as PDF.";
+  function showDlNotice() { var n = $("dlNotice"); if (n) n.hidden = false; }
   function saveFile(filename, blob) {
     return getDownloads().then(function (dl) {
       if (dl) {
@@ -789,16 +808,23 @@
           var code = err && err.code;
           if (code === "declined") toast("Download cancelled");
           else if (code === "rate_limited") toast("A download is already waiting for you – check the prompt");
-          else toast("This file can't be saved here. Try again from the full artifact page.");
+          else { showDlNotice(); toast(DL_HELP); }
         });
       }
-      // Standalone copy of the page: ordinary browser download
+      if (IN_CLAUDE) { showDlNotice(); toast(DL_HELP); return; }
+      // Standalone copy of the page opened as a file: ordinary browser download
       var a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = filename;
       document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
       toast("Saved " + filename);
     });
+  }
+  function doPrint() {
+    switchTab("resume");
+    setTimeout(function () {
+      try { window.print(); } catch (e) { toast("Printing is blocked here. Open the link in Chrome or Safari."); }
+    }, 150);
   }
   function fileBase() {
     var n = v("name").replace(/[^A-Za-z0-9 ]/g, "").trim().split(/\s+/).filter(Boolean).slice(0, 3).join("_");
@@ -1063,6 +1089,7 @@
     switch (t.getAttribute("data-action")) {
       case "pdf": doPDF(); break;
       case "docx": doDOCX(); break;
+      case "print": doPrint(); break;
       case "backup": doBackup(); break;
       case "restore": $("jsonInput").click(); break;
       case "photo": $("photoInput").click(); break;
@@ -1098,6 +1125,7 @@
   var lastTab = null;
   try { lastTab = sessionStorage.getItem(STORE_KEY + "-tab"); } catch (e) {}
   if (lastTab && $("panel-" + lastTab)) switchTab(lastTab);
+  if (IN_CLAUDE) getDownloads().then(function (dl) { if (!dl) showDlNotice(); });
 })();
 </script>
 
