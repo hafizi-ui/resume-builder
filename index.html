@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>ResumeGo</title><meta name="description" content="Internship resume builder for KPTM students"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Automation Resume</title><meta name="description" content="Resume and CV builder for diploma students in Malaysia"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
@@ -101,6 +101,16 @@
     font-weight: 600; cursor: pointer; font-variant-numeric: tabular-nums;
   }
   .score-chip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--c, #fff); }
+  .doc-switch { display: inline-flex; align-items: stretch; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .doc-switch > span { display: flex; align-items: center; padding: 0 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .seg { border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink); padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .seg[aria-pressed="true"] { background: var(--navy); color: #ffffff; }
+  .doc-hint { font-size: 13px; color: var(--muted); flex-basis: 100%; }
+  .head-actions { display: flex; align-items: center; gap: 12px; }
+  .privacy-link { border: 0; background: transparent; color: var(--tab-ink); font-size: 13px; font-weight: 600; text-decoration: underline; cursor: pointer; padding: 4px 2px; }
+  .privacy-link:hover { color: var(--bar-ink); }
+  .score-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .notice.warn { border-color: var(--warn); }
   .tabs { display: flex; gap: 2px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
   .tab {
     border: 0; background: transparent; color: var(--tab-ink); padding: 10px 14px;
@@ -179,7 +189,7 @@
     font-family: "Carlito", Calibri, "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.32;
   }
   .r-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
-  .r-name { font-size: 18pt; font-weight: 700; color: #1f3864; line-height: 1.15; margin: 0 0 4px; }
+  .r-name { font-size: 18pt; font-weight: 700; color: #111111; line-height: 1.15; margin: 0 0 4px; }
   .r-contact div { margin: 1px 0; color: #333333; }
   .r-photo {
     width: 30mm; height: 38mm; flex: 0 0 auto; background: #e6e8ec; border: 1px solid #c9cdd4;
@@ -187,7 +197,7 @@
   }
   .r-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .r-sec { margin-top: 10pt; }
-  .r-sec h2 { font-size: 11pt; color: #1f3864; margin: 0 0 5pt; padding-bottom: 2pt; border-bottom: 1.2pt solid #1f3864; letter-spacing: .4px; }
+  .r-sec h2 { font-size: 11pt; color: #111111; margin: 0 0 5pt; padding-bottom: 2pt; border-bottom: 1.2pt solid #111111; letter-spacing: .4px; }
   .r-row { display: flex; justify-content: space-between; gap: 12px; margin-top: 5pt; }
   .r-row:first-of-type { margin-top: 0; }
   .r-row .t { font-weight: 700; }
@@ -249,7 +259,7 @@
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   @page { size: A4; margin: 0; }
   @media print {
-    .topbar, .toolbar, .toast, #panel-form, #panel-coach, #panel-howto { display: none !important; }
+    #measure, .topbar, .toolbar, .toast, #sharedWarn, #panel-form, #panel-coach, #panel-howto, #panel-privacy { display: none !important; }
     main { padding: 0; }
     #panel-resume { display: block !important; }
     .page { box-shadow: none; margin: 0; }
@@ -259,8 +269,11 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand-row">
-      <div class="brand">ResumeGo<span>Internship resume · KPTM</span></div>
-      <button class="score-chip" id="scoreChip" type="button"><i></i><span id="scoreChipText">Score –</span></button>
+      <div class="brand">Automation Resume<span>Resume &amp; CV builder</span></div>
+      <div class="head-actions">
+        <button class="privacy-link" type="button" data-go="privacy">Privacy</button>
+        <button class="score-chip" id="scoreChip" type="button"><i></i><span id="scoreChipText">Score –</span></button>
+      </div>
     </div>
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-form" data-tab="form" aria-selected="true">Fill-In Form</button>
@@ -272,27 +285,34 @@
 </header>
 
 <main>
+  <div class="notice warn" id="sharedWarn" hidden>
+    <p><b>Using a lab or shared computer? Press Delete all data when you finish.</b> Your resume is saved in this browser, so the next person on this computer could see it.</p>
+    <button class="btn sm" type="button" data-action="warn-ok">OK, got it</button>
+    <button class="btn sm danger" type="button" data-action="delete-all">Delete all data on this device</button>
+  </div>
   <!-- FORM -->
   <section class="panel" id="panel-form">
     <div class="toolbar">
+      <div class="doc-switch" role="group" aria-label="Document type"><span>Document</span><button class="seg" type="button" data-doctype="resume" aria-pressed="true">Resume</button><button class="seg" type="button" data-doctype="cv" aria-pressed="false">CV</button></div>
       <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
       <button class="btn" type="button" data-action="docx">Download Word</button>
       <button class="btn ghost" type="button" data-action="print">Print / Save as PDF</button>
       <span class="spacer"></span>
       <span class="saved-state" id="savedState"></span>
+      <span class="doc-hint" id="docHint"></span>
     </div>
     <div class="notice" id="dlNotice" hidden style="border-color:var(--warn)">
-      <p><b>Download is not available in this browser view.</b> Open the link in <b>Chrome or Safari</b> (not inside WhatsApp, Telegram or Instagram) and sign in to Claude. You can also use <b>Print / Save as PDF</b> and choose “Save as PDF”.</p>
+      <p><b>Download is not available in this browser view.</b> Use <b>Print / Save as PDF</b> and choose “Save as PDF”, or open the link in <b>Chrome or Safari</b> (not inside WhatsApp, Telegram or Instagram).</p>
     </div>
     <div class="notice" id="exampleNotice" hidden>
-      <p><b>This is an example resume.</b> Replace it with your own details, or start from an empty form.</p>
+      <p><b>This is an example.</b> Replace it with your own details, or start from an empty form.</p>
       <button class="btn sm" type="button" data-action="clear-now">Start with an empty form</button>
     </div>
     <div class="form-layout">
       <div>
         <div class="notice">
           <p>Type into the yellow boxes and the resume updates as you go. Leave a box empty to hide that line.
-            Boxes marked <b style="color:var(--bad)">*</b> are required. Your answers are saved in this browser only, so no one else can see them.</p>
+            Boxes marked <b style="color:var(--bad)">*</b> are required. Your answers are saved in this browser only and are not sent to our server (see <a href="#" data-go="privacy">Privacy</a>).</p>
         </div>
         <div class="section" style="padding:14px 16px">
           <div class="field">
@@ -300,9 +320,9 @@
             <div class="photo-row">
               <button class="btn sm" type="button" id="photoBtn" data-action="photo">Upload photo</button>
               <button class="btn sm danger" type="button" data-action="photo-remove">Remove photo</button>
-              <label class="check" for="showPhoto"><input type="checkbox" id="showPhoto" checked> Show photo box on resume</label>
+              <label class="check" for="showPhoto"><input type="checkbox" id="showPhoto"> Show photo on resume / CV</label>
             </div>
-            <div class="tip">Passport-style, formal attire, plain background.</div>
+            <div class="tip">Off by default. Photos are not recommended for ATS – add one only if the employer asks. Passport-style, formal attire, plain background.</div>
           </div>
         </div>
         <div id="formRoot"></div>
@@ -311,10 +331,11 @@
           <button class="btn sm ghost" type="button" data-action="restore">Open a backup file</button>
           <button class="btn sm ghost" type="button" data-action="sample">Load the example</button>
           <button class="btn sm ghost danger" type="button" data-action="clear" id="clearBtn">Clear all</button>
+          <button class="btn sm ghost danger" type="button" data-action="delete-all">Delete all data on this device</button>
         </div>
       </div>
       <aside class="preview-wrap">
-        <div class="preview-head"><span>Live preview · A4</span><button class="btn sm" type="button" data-go="resume">Full size</button></div>
+        <div class="preview-head"><span>Live preview · <span id="pageInfo">A4</span></span><button class="btn sm" type="button" data-go="resume">Full size</button></div>
         <div class="preview-box" id="previewBox"></div>
       </aside>
     </div>
@@ -323,6 +344,7 @@
   <!-- RESUME -->
   <section class="panel" id="panel-resume" hidden>
     <div class="toolbar">
+      <div class="doc-switch" role="group" aria-label="Document type"><span>Document</span><button class="seg" type="button" data-doctype="resume" aria-pressed="true">Resume</button><button class="seg" type="button" data-doctype="cv" aria-pressed="false">CV</button></div>
       <button class="btn primary" type="button" data-action="pdf">Download PDF</button>
       <button class="btn" type="button" data-action="docx">Download Word</button>
       <button class="btn ghost" type="button" data-action="print">Print / Save as PDF</button>
@@ -335,7 +357,7 @@
   <section class="panel" id="panel-coach" hidden>
     <div class="coach-grid">
       <div class="card">
-        <h3>Smart suggestions by field</h3>
+        <h3>Smart suggestions by field (resume)</h3>
         <div class="field">
           <label for="fieldSelect">Target job field</label>
           <select id="fieldSelect"></select>
@@ -345,11 +367,12 @@
         <div class="sugg"><div class="sugg-head">Suggested soft skills <button class="btn sm" type="button" data-use="softSkills">Use this</button></div><p id="sgSoft"></p></div>
       </div>
       <div class="card" id="scoreCard">
-        <h3>ATS &amp; quality score</h3>
+        <h3>Resume checklist score</h3>
         <div class="score-big"><b id="scoreNum">0</b><span>/ 100</span></div>
         <div class="score-msg" id="scoreMsg"></div>
         <div class="meter" id="meter"></div>
         <div class="meter-note" id="meterNote"></div>
+        <div class="score-note">Checks completeness. Not a guarantee of passing ATS or interviews.</div>
       </div>
       <div class="card" style="grid-column:1/-1">
         <h3>Checklist &amp; tips</h3>
@@ -366,12 +389,25 @@
   <!-- HOW TO -->
   <section class="panel" id="panel-howto" hidden>
     <div class="howto">
+      <div class="card"><h3>Resume or CV?</h3><p>Choose <b>Resume</b> for internships and industry jobs: 1–2 pages, focused on skills and measurable results. Choose <b>CV</b> for further study, scholarships and research or academic posts: a complete record of education, research, teaching, publications, grants and references. Both use the same details; the CV adds section 10.</p></div>
       <div class="card"><h3>1. Fill in your details</h3><p>On <b>Fill-In Form</b>, type into the yellow boxes. The grey tip under each box shows an example. Required boxes, including email, are marked *.</p></div>
       <div class="card"><h3>2. Check your resume</h3><p>Open <b>Resume</b> to see the full A4 page. Then open <b>Resume Coach</b> and aim for a score of 80 or more before you send it.</p></div>
-      <div class="card"><h3>3. Add your photo</h3><p>Click <b>Upload photo</b> at the top of the form. If you prefer no photo, untick “Show photo box on resume”.</p></div>
+      <div class="card"><h3>3. Photo (optional)</h3><p>Photos are off by default because many applicant tracking systems (ATS) cannot read them. If an employer asks for one, click <b>Upload photo</b>.</p></div>
       <div class="card"><h3>4. Extra slots</h3><p>A 2nd job, a 3rd leadership role and a 4th achievement appear on the resume as soon as you fill them in. Empty lines are always hidden.</p></div>
       <div class="card"><h3>5. Download</h3><p><b>Download PDF</b> gives a one-page A4 file that recruiters and ATS systems can read. <b>Download Word</b> gives an editable .docx file.</p></div>
       <div class="card"><h3>Your work is saved</h3><p>Answers are saved automatically in this browser. To continue on another device, click <b>Save a backup file</b>, then <b>Open a backup file</b> on the other device.</p></div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="panel" id="panel-privacy" hidden>
+    <div class="howto">
+      <div class="card"><h3>Where your resume is saved</h3><p>Everything you type, and your photo, is saved only in this browser on this device. There is no account and no login.</p></div>
+      <div class="card"><h3>What is sent to a server</h3><p>Your resume content and photo are not sent to our server. We cannot see them.</p></div>
+      <div class="card"><h3>Usage data</h3><p>This version does not collect or send usage analytics.</p></div>
+      <div class="card"><h3>Files loaded from other services</h3><p>To show fonts and to create PDF and Word files, this page downloads fonts from Google Fonts and code libraries from jsDelivr. Like any website, these services may receive your internet (IP) address and basic connection details. They do not receive your resume.</p></div>
+      <div class="card"><h3>How to delete your data</h3><p>Press <b>Delete all data on this device</b>. This removes your answers, photo and settings from this browser. Backup files you saved yourself are not affected; delete them from your Downloads folder.</p>
+        <div class="toolbar" style="margin:10px 0 0"><button class="btn danger" type="button" data-action="delete-all">Delete all data on this device</button></div></div>
     </div>
   </section>
 </main>
@@ -384,16 +420,16 @@
 (function () {
   "use strict";
 
-  /* ============ 1. Form definition (mirrors the Excel "Fill-In Form") ============ */
+  /* ============ 1. Form definition ============ */
   var SECTIONS = [
     { title: "1 · Personal details", fields: [
       ["name", "Full name", "As in IC, in CAPITAL letters", { req: 1 }],
       ["location", "Location", "City, State only – no full home address"],
       ["phone", "Phone", "+60 12-345 6789", { req: 1 }],
-      ["email", "Email", "Professional email, e.g. nur.aliyyah@gmail.com (not a nickname)", { req: 1 }],
+      ["email", "Email", "Professional email based on your own name, e.g. nur.aisyah@example.com (not a nickname)", { req: 1 }],
       ["linkedin", "LinkedIn / website", "linkedin.com/in/your-name"]
     ]},
-    { title: "2 · Profile & internship target", fields: [
+    { title: "2 · Profile & internship target (resume)", mode: "resume", fields: [
       ["summary", "Profile summary", "2–3 sentences: programme, CGPA, strengths, proof. Do NOT write the 'Seeking…' sentence – it is added automatically from the boxes below.", { req: 1, area: 1 }],
       ["role", "Internship role", "e.g. Human Resource / Admin / IT Support", { req: 1 }],
       ["period", "Internship period", "e.g. 23 November 2026 to 26 February 2027", { req: 1 }],
@@ -418,11 +454,11 @@
       ["projB1", "Bullet 1", "What YOU did, start with a verb: 'Drafted a job ad and 15 interview questions…'", { sub: 1 }],
       ["projB2", "Bullet 2", "The result, with a number: 'Scored 85%, highest in class'", { sub: 1 }]
     ]},
-    { title: "5 · Work experience", fields: [
+    { title: "5 · Work experience (most recent first)", fields: [
       ["job1", "Job title 1", "Include part-time / seasonal jobs"],
       ["job1Date", "Date", "Mon YYYY – Mon YYYY", { sub: 1 }],
       ["job1Co", "Company / location", "Company Sdn Bhd – City, State", { sub: 1 }],
-      ["job1B1", "Bullet 1", "Verb + task + NUMBER + unit of time: 'Packed 500 containers per shift'", { sub: 1 }],
+      ["job1B1", "Bullet 1", "Action verb + result with a number (X-Y-Z: achieved X, measured by Y, by doing Z), e.g. 'Packed 500 containers per shift with zero rejects'", { sub: 1 }],
       ["job1B2", "Bullet 2", "Teamwork / targets / procedures", { sub: 1 }],
       ["job1B3", "Bullet 3", "Anything transferable: customers served, cash handled, trained new staff", { sub: 1 }],
       ["job2", "Job title 2", "Optional – appears on the resume once filled", { gap: 1 }],
@@ -456,45 +492,68 @@
     { title: "8 · Skills", fields: [
       ["fieldSkills", "Field skills", "Job-related skills. Resume Coach suggests some for your field.", { area: 1 }],
       ["techSkills", "Technical", "Software + level, e.g. Excel (pivot tables, VLOOKUP)", { req: 1, area: 1 }],
-      ["softSkills", "Soft skills", "4–6 skills you can prove elsewhere on the resume", { area: 1 }]
+      ["softSkills", "Soft skills", "4–6 skills you can prove elsewhere on the resume", { area: 1 }],
+      ["certifications", "Certifications (optional)", "One per line: certificate, issuer, year", { area: 1 }]
     ]},
     { title: "9 · Additional information", fields: [
       ["languages", "Languages", "Add proof: English (MUET Band 3.5)"],
       ["licence", "Licence & transport", "State the class: Own transport; Class D driving licence"],
-      ["reference", "Reference", "Keep as 'Available upon request'"]
+      ["reference", "Reference (resume)", "Keep as 'Available upon request'. For a CV, list full references in section 10."]
+    ]},
+    { title: "10 · CV only: academic & research", mode: "cv", fields: [
+      ["cvDegrees", "Degrees after your name", "e.g. BBA (Hons), Dip. HRM – shown after your name on the CV"],
+      ["cvAddress", "Academic / professional address", "Department, institution, city – shown instead of your location on the CV"],
+      ["cvSummary", "Research & academic summary", "2–4 sentences: your academic focus, research interests and what you want to study or research next", { area: 1 }],
+      ["edu1Thesis", "Thesis / final project title (institution 1)", "e.g. Final project: Structured Orientation and New-Staff Confidence"],
+      ["edu1Advisor", "Supervisor / advisor", "e.g. Dr. Name, Lecturer, Department"],
+      ["cvResearch", "Research experience", "One per line: role, project, institution, dates – what you did", { area: 1 }],
+      ["cvTeaching", "Teaching experience", "One per line: course or class, institution, semester – your role", { area: 1 }],
+      ["cvPublications", "Publications", "One per line, in one citation style (e.g. APA)", { area: 1 }],
+      ["cvPresentations", "Presentations & posters", "One per line: author, year, title, event, place", { area: 1 }],
+      ["cvGrants", "Grants, scholarships & fellowships", "One per line: name, funder, years", { area: 1 }],
+      ["cvMemberships", "Professional memberships & licences", "One per line: body, membership type, years", { area: 1 }],
+      ["cvReferences", "References", "One per line: name, position, institution, email. Ask each person first.", { area: 1 }]
     ]}
   ];
 
+  // Fictional example (fixture v1, approved by the owner on 15 Nov 2026). No real person's details.
   var SAMPLE = {
-    name: "NUR ALIYYAH BINTI MOHAMAD HANAPI", location: "Kulai, Johor", phone: "+60 13-916 6352", email: "nur.aliyyah.hanapi@gmail.com",
-    linkedin: "linkedin.com/in/nur-aliyyah-8191513ba",
-    summary: "Final-semester Diploma in Human Resource Management student at KPTM Kuantan (CGPA 3.71) with a foundation in recruitment, employee relations and HR administration. Experienced in handling programme finances as a committee treasurer and in meeting daily targets in a fast-paced production team.",
+    name: "NUR AISYAH BINTI CONTOH", location: "Kuantan, Pahang", phone: "+60 12-000 0000", email: "nur.aisyah.contoh@example.com",
+    linkedin: "linkedin.com/in/contoh-pelajar",
+    summary: "Final-semester Diploma in Human Resource Management student at Kolej Contoh (CGPA 3.65) with a foundation in recruitment, employee relations and HR administration. Experienced in managing programme finances as a committee treasurer and in meeting daily targets in a part-time retail role.",
     role: "Human Resource", period: "23 November 2026 to 26 February 2027",
     aim: "support recruitment, employee records and day-to-day HR operations",
-    edu1: "Kolej Poly-Tech MARA (KPTM) Kuantan", edu1Date: "Nov 2024 – Present",
-    edu1Prog: "Diploma in Human Resource Management – Kuantan, Pahang", edu1Cgpa: "3.71",
-    edu1Hon: "Dean's List (Semester 2 & 3)",
+    edu1: "Kolej Contoh", edu1Date: "Nov 2024 – Present",
+    edu1Prog: "Diploma in Human Resource Management – Kuantan, Pahang", edu1Cgpa: "3.65",
+    edu1Hon: "Dean's List (Semester 3)",
     edu1Courses: "Recruitment & Selection, Employment Law, Industrial Relations, Compensation Management, HR Information Systems",
-    edu2Res: "5A 3B",
-    proj: "Employee Onboarding Plan for an SME", projDate: "Jun 2025",
+    edu2: "SMK Contoh", edu2Date: "2019 – 2023", edu2Qual: "Sijil Pelajaran Malaysia (SPM) – Kuantan, Pahang", edu2Res: "4A 4B",
+    proj: "Staff Orientation Guide for a Small Business", projDate: "Jun 2025",
     projRole: "Recruitment & Selection – Group Leader (4 members)",
-    projB1: "Drafted a job advertisement, 15 structured interview questions and a 5-day onboarding checklist for a 30-staff SME.",
-    projB2: "Led a team of 4 to present the plan to the lecturer panel and scored 85%, the highest in class.",
-    edu2: "SMK Tunku Abdul Rahman Putra", edu2Date: "2019 – 2023", edu2Qual: "Sijil Pelajaran Malaysia (SPM) – Kulai, Johor",
-    job1: "Packing Operator (Part-Time)", job1Date: "Aug 2024 – Nov 2024", job1Co: "GC Packaging Sdn Bhd – Kulai, Johor",
-    job1B1: "Packed and quality-checked approximately 500 food containers, bundling 150 pieces per package accurately and consistently.",
-    job1B2: "Worked with the production team to meet daily output targets while following standard operating procedures (SOP) and safety rules.",
-    job1B3: "Trained 3 new part-time staff on packing procedures and quality checks during peak production weeks.",
-    lead1: "Treasurer, Program Khidmat Masyarakat (Community Service Programme), KPTM Kuantan", lead1Date: "Feb 2025 – Mar 2025",
-    lead1B1: "Managed a programme budget of RM2,000, recorded all expenses and prepared the final financial report.",
-    lead1B2: "Coordinated with 12 committee members to run the programme for 80 participants.",
-    lead2: "Member, Kelab Sukan dan Rekreasi (Sports & Recreation Club), KPTM Kuantan", lead2Date: "Nov 2024 – Present",
-    ach1: "2nd Place, Batu Seremban – Sukan Rakyat (SUKRA) KPTM 2025", ach1Date: "Aug 2025",
-    ach2: "3rd Place, Badminton – FESKO KPTM Kuantan", ach2Date: "Oct 2024",
+    projB1: "Drafted a job advertisement, 12 structured interview questions and a 5-day orientation checklist for a 25-staff business.",
+    projB2: "Led a team of 4 to present the guide to a lecturer panel and scored 85%, the highest in class.",
+    job1: "Retail Assistant (Part-Time)", job1Date: "Aug 2024 – Nov 2024", job1Co: "Syarikat Contoh Sdn Bhd – Kuantan, Pahang",
+    job1B1: "Served about 60 customers per shift and handled cash and card payments accurately.",
+    job1B2: "Worked with a team of 5 to restock shelves and meet daily sales targets while following store procedures.",
+    job1B3: "Trained 2 new part-time staff on the cash register and stock checks during the year-end sale.",
+    lead1: "Treasurer, Community Service Programme, Kolej Contoh", lead1Date: "Feb 2025 – Mar 2025",
+    lead1B1: "Managed a programme budget of RM1,500, recorded all expenses and prepared the final financial report.",
+    lead1B2: "Coordinated with 10 committee members to run the programme for 70 participants.",
+    ach1: "2nd Place, Inter-Class Badminton Tournament", ach1Date: "Aug 2025",
     fieldSkills: "Recruitment support (job ads, CV screening, interview scheduling), employee record keeping, HR documentation, basic knowledge of the Employment Act 1955",
     techSkills: "Microsoft Word, Excel, PowerPoint (Advanced), Canva (Advanced), Google Workspace",
     softSkills: "Teamwork, communication, attention to detail, organisation, time management",
-    languages: "Malay (Native), English (Intermediate – MUET Band 3.5)", licence: "Own transport; Class D driving licence", reference: "Available upon request"
+    languages: "Malay (Native), English (Intermediate – MUET Band 3.5)", licence: "Own transport; Class D driving licence",
+    cvAddress: "Department of Human Resource Management, Kolej Contoh, Kuantan, Pahang",
+    cvSummary: "Diploma student interested in onboarding and employee engagement in small businesses. My final project examines how a structured orientation affects the confidence of new staff. I plan to continue to a bachelor's degree in human resource management with a research component.",
+    edu1Thesis: "Final project: Structured Orientation and New-Staff Confidence in Small Businesses (in progress)",
+    edu1Advisor: "Dr. Contoh, Lecturer, Department of Human Resource Management",
+    cvResearch: "Student research assistant, survey on internship readiness, Kolej Contoh, Mar 2025 – May 2025 – distributed and coded 120 questionnaires",
+    cvTeaching: "Peer tutor, Introduction to Human Resource Management, Kolej Contoh, Semester 3 – led weekly revision sessions for 15 students",
+    cvPresentations: "Contoh, N. A. (2025). Staff orientation guide for a small business [Poster]. Student Innovation Day, Kolej Contoh.",
+    cvGrants: "Yayasan Contoh Study Scholarship, 2024 – 2026",
+    cvMemberships: "Student member, Human Resource Student Association, Kolej Contoh, 2024 – present",
+    cvReferences: "Dr. Contoh, Lecturer, Department of Human Resource Management, Kolej Contoh, contoh.pensyarah@example.com\nEncik Contoh, Store Supervisor, Syarikat Contoh Sdn Bhd, Kuantan, contoh.penyelia@example.com"
   };
 
   var FIELD_DATA = {
@@ -521,8 +580,13 @@
   };
 
   /* ============ 2. State + browser save ============ */
-  var STORE_KEY = "kptm-resume-builder-v2";
-  var state = { data: {}, photo: "", showPhoto: true, isExample: false };
+  var APP_ID = "automation-resume";
+  var STORE_KEY = APP_ID + "-v3";
+  var WARN_KEY = APP_ID + "-shared-warning-seen";
+  var BACKUP_APPS = [APP_ID, "resume-builder"]; // "resume-builder" = backups made before the rename
+  // Every key this app (or its old version) writes. Delete all data removes exactly these. F-03 adds its keys here.
+  var OUR_KEYS = [STORE_KEY, STORE_KEY + "-tab", WARN_KEY];
+  var state = { data: {}, photo: "", showPhoto: false, isExample: false, docType: "resume" };
   var ALL_KEYS = [], REQUIRED = {};
   SECTIONS.forEach(function (s) { s.fields.forEach(function (f) {
     ALL_KEYS.push(f[0]); if (f[3] && f[3].req) REQUIRED[f[0]] = true;
@@ -540,12 +604,28 @@
       $("savedState").textContent = "Not saved – use “Save a backup file”";
     }
   }
+  // Remove everything this app stored in this browser, then start fresh.
+  function isOurKey(k) { return OUR_KEYS.indexOf(k) > -1; }
+  function deleteAllData() {
+    clearTimeout(timer);
+    [window.localStorage, window.sessionStorage].forEach(function (store) {
+      try {
+        Object.keys(store).forEach(function (k) { if (isOurKey(k)) store.removeItem(k); });
+      } catch (e) {}
+    });
+    location.reload();
+  }
+  function showSharedWarning() {
+    var seen = false;
+    try { seen = localStorage.getItem(WARN_KEY) === "1"; } catch (e) {}
+    $("sharedWarn").hidden = seen;
+  }
   function restoreLocal() {
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (!raw) return false;
       var s = JSON.parse(raw);
-      if (s && s.isExample) return false; // untouched example: show the latest version
+      if (s && s.isExample) { state.docType = s.docType === "cv" ? "cv" : "resume"; return false; } // untouched example: show the latest version
       applyState(s);
       return true;
     } catch (e) { return false; }
@@ -554,7 +634,8 @@
     state.data = {};
     ALL_KEYS.forEach(function (k) { if (s && s.data && typeof s.data[k] === "string") state.data[k] = s.data[k]; });
     state.photo = (s && typeof s.photo === "string" && s.photo.indexOf("data:image/") === 0) ? s.photo : "";
-    state.showPhoto = !(s && s.showPhoto === false);
+    state.showPhoto = !!(s && s.showPhoto === true); // off unless the user turned it on
+    state.docType = (s && s.docType === "cv") ? "cv" : "resume";
     state.isExample = !!(s && s.isExample);
   }
 
@@ -562,7 +643,7 @@
   function buildForm() {
     var h = "";
     SECTIONS.forEach(function (s, i) {
-      h += '<details class="section" open data-sec="' + i + '"><summary>' + esc(s.title) + '<span class="count"></span></summary><div class="section-body">';
+      h += '<details class="section" open data-sec="' + i + '"' + (s.mode ? ' data-mode="' + s.mode + '"' : "") + '><summary>' + esc(s.title) + '<span class="count"></span></summary><div class="section-body">';
       s.fields.forEach(function (f) {
         var k = f[0], o = f[3] || {};
         h += '<div class="field' + (o.sub ? " sub" : "") + (o.gap ? " gap" : "") + '" data-wrap="' + k + '">';
@@ -593,48 +674,48 @@
   function profileText() {
     var t = v("summary");
     if (v("role")) {
-      t += " Seeking a " + v("role") + " internship";
+      t += " Seeking an internship in " + v("role");
       if (v("period")) t += " from " + v("period");
       if (v("aim")) t += " to " + v("aim");
       t += ".";
     }
     return t.trim();
   }
+  function lines(k) { return v(k).split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function words(s) { return s ? s.split(/\s+/).filter(Boolean).length : 0; }
+  // One model per document type; the preview, PDF and Word all draw from it.
   function buildModel() {
-    var m = {
-      name: v("name"),
-      contact: [joinNon([v("location"), v("phone")], "   |   "), v("email"), v("linkedin")].filter(Boolean),
-      photo: state.showPhoto ? (state.photo || "placeholder") : "",
-      sections: []
-    };
+    var cv = state.docType === "cv";
+    var name = v("name");
+    if (cv && name && v("cvDegrees")) name += ", " + v("cvDegrees");
+    var m = { kind: cv ? "cv" : "resume", name: name, photo: state.showPhoto ? (state.photo || "placeholder") : "", sections: [] };
+    m.contact = cv
+      ? [v("cvAddress") || v("location"), joinNon([v("phone"), v("email")], "   |   "), v("linkedin")].filter(Boolean)
+      : [joinNon([v("location"), v("phone")], "   |   "), v("email"), v("linkedin")].filter(Boolean);
     function sec(title, items) { if (items.length) m.sections.push({ title: title, items: items }); }
     function bullets(keys, arr, lvl) { keys.forEach(function (k) { if (v(k)) arr.push({ k: "bullet", t: v(k), lvl: lvl || 1 }); }); }
-
-    var p = profileText();
-    sec("PROFILE", p ? [{ k: "text", t: p }] : []);
+    function list(k) { return lines(k).map(function (x) { return { k: "bullet", t: x, lvl: 1 }; }); }
 
     var edu = [];
     if (v("edu1") || v("edu1Prog")) {
       edu.push({ k: "row", t: v("edu1"), d: v("edu1Date") });
       var e1 = joinNon([v("edu1Prog"), v("edu1Cgpa") ? "CGPA: " + v("edu1Cgpa") : "", v("edu1Hon")], "  |  ");
       if (e1) edu.push({ k: "sub", t: e1 });
-      if (v("edu1Courses")) edu.push({ k: "sub", t: "Relevant courses: " + v("edu1Courses") });
+      if (cv && v("edu1Thesis")) edu.push({ k: "sub", t: "Thesis / project: " + v("edu1Thesis") });
+      if (cv && v("edu1Advisor")) edu.push({ k: "sub", t: "Supervisor: " + v("edu1Advisor") });
+      if (v("edu1Courses")) edu.push({ k: "sub", t: (cv ? "Coursework: " : "Relevant courses: ") + v("edu1Courses") });
     }
     if (v("edu2") || v("edu2Qual")) {
       edu.push({ k: "row", t: v("edu2"), d: v("edu2Date") });
       var e2 = joinNon([v("edu2Qual"), v("edu2Res") ? "Result: " + v("edu2Res") : ""], "  |  ");
       if (e2) edu.push({ k: "sub", t: e2 });
     }
-    sec("EDUCATION", edu);
-
     var pj = [];
     if (v("proj")) {
       pj.push({ k: "row", t: v("proj"), d: v("projDate") });
       if (v("projRole")) pj.push({ k: "sub", t: v("projRole") });
       bullets(["projB1", "projB2"], pj);
     }
-    sec("ACADEMIC PROJECT", pj);
-
     var work = [];
     ["job1", "job2"].forEach(function (j) {
       if (!v(j)) return;
@@ -642,32 +723,70 @@
       if (v(j + "Co")) work.push({ k: "sub", t: v(j + "Co") });
       bullets([j + "B1", j + "B2", j + "B3"], work);
     });
-    sec("WORK EXPERIENCE", work);
-
     var lead = [];
     [["lead1", ["lead1B1", "lead1B2"]], ["lead2", ["lead2B1"]], ["lead3", []]].forEach(function (L) {
       if (!v(L[0])) return;
       lead.push({ k: "row", t: v(L[0]), d: v(L[0] + "Date"), nb: true, bl: true });
       bullets(L[1], lead, 2);
     });
-    sec("CO-CURRICULAR ACTIVITIES", lead);
-
     var ach = [];
     ["ach1", "ach2", "ach3", "ach4"].forEach(function (a) { if (v(a)) ach.push({ k: "ach", t: v(a), d: v(a + "Date") }); });
-    sec("ACHIEVEMENTS", ach);
-
     var sk = [];
     [["Field skills", "fieldSkills"], ["Technical", "techSkills"], ["Soft skills", "softSkills"]].forEach(function (x) {
       if (v(x[1])) sk.push({ k: "label", l: x[0], t: v(x[1]) });
     });
-    sec("SKILLS", sk);
-
     var add = [];
-    [["Languages", "languages"], ["Licence & Transport", "licence"], ["Reference", "reference"]].forEach(function (x) {
+    (cv ? [["Languages", "languages"], ["Licence & Transport", "licence"]]
+        : [["Languages", "languages"], ["Licence & Transport", "licence"], ["Reference", "reference"]]).forEach(function (x) {
       if (v(x[1])) add.push({ k: "label", l: x[0], t: v(x[1]) });
     });
-    sec("ADDITIONAL INFORMATION", add);
+
+    if (!cv) {
+      var p = profileText();
+      sec("PROFESSIONAL SUMMARY", p ? [{ k: "text", t: p }] : []);
+      sec("EDUCATION", edu);
+      sec("WORK EXPERIENCE", work);
+      sec("ACADEMIC PROJECTS", pj);
+      sec("LEADERSHIP & ACTIVITIES", lead);
+      sec("AWARDS & ACHIEVEMENTS", ach);
+      sec("SKILLS", sk);
+      sec("CERTIFICATIONS", list("certifications"));
+      sec("ADDITIONAL INFORMATION", add);
+    } else {
+      sec("RESEARCH & ACADEMIC SUMMARY", v("cvSummary") ? [{ k: "text", t: v("cvSummary") }] : []);
+      sec("EDUCATION", edu);
+      sec("RESEARCH EXPERIENCE", list("cvResearch"));
+      sec("TEACHING EXPERIENCE", list("cvTeaching"));
+      sec("PUBLICATIONS", list("cvPublications"));
+      sec("PRESENTATIONS", list("cvPresentations"));
+      sec("GRANTS, SCHOLARSHIPS & FELLOWSHIPS", list("cvGrants"));
+      sec("HONOURS & AWARDS", ach);
+      sec("PROFESSIONAL MEMBERSHIPS & LICENCES", list("cvMemberships"));
+      sec("WORK EXPERIENCE", work);
+      sec("ACADEMIC PROJECTS", pj);
+      sec("LEADERSHIP & ACTIVITIES", lead);
+      sec("SKILLS", sk);
+      sec("CERTIFICATIONS", list("certifications"));
+      sec("ADDITIONAL INFORMATION", add);
+      var refs = list("cvReferences");
+      if (!refs.length && v("reference")) refs = [{ k: "text", t: v("reference") }];
+      sec("REFERENCES", refs);
+    }
     return m;
+  }
+
+  // Approximate page count of the printed A4 document (measured off-screen).
+  var measureBox = null, lastPages = 1;
+  function countPages(html) {
+    if (!measureBox) {
+      measureBox = document.createElement("div"); measureBox.id = "measure"; measureBox.setAttribute("aria-hidden", "true");
+      measureBox.style.cssText = "position:absolute;left:-10000px;top:0;visibility:hidden;pointer-events:none";
+      document.body.appendChild(measureBox);
+    }
+    measureBox.innerHTML = html + '<div style="height:297mm;width:1px"></div>';
+    var page = measureBox.firstChild, a4 = measureBox.lastChild.offsetHeight;
+    if (!page || !a4) return 1;
+    return Math.max(1, Math.ceil((page.offsetHeight - 2) / a4));
   }
 
   function modelToHTML(m) {
@@ -692,12 +811,15 @@
     return h + "</div>";
   }
 
-  /* ============ 5. Resume Coach (same 16 checks as the Excel) ============ */
+  /* ============ 5. Resume Coach ============ */
+  function isEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function hasNumber(s) { return /[0-9]/.test(s); }
+  var BULLET_KEYS = ["job1B1", "job1B2", "job1B3", "job2B1", "job2B2", "job2B3", "projB1", "projB2", "lead1B1", "lead1B2", "lead2B1"];
   var MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-  var CHECKS = [
+  var RESUME_CHECKS = [
     ["Full name is filled in", "Add your full name at the top.", function () { return !!v("name"); }],
     ["Contact number is present", "Add a phone number recruiters can reach.", function () { return !!v("phone"); }],
-    ["Professional email added", "Email is REQUIRED – employers reply by email. Use a professional address.", function () { return v("email").indexOf("@") > -1; }],
+    ["Professional email added", "Email is REQUIRED – employers reply by email. Use a professional address.", function () { return isEmail(v("email")); }],
     ["LinkedIn profile added", "Create a free LinkedIn profile and paste the link.", function () { return !!v("linkedin"); }],
     ["Profile summary is detailed (150+ characters)", "Write 2–3 sentences: programme, CGPA, strengths and proof.", function () { return (state.data.summary || "").length >= 150; }],
     ["Internship role & period stated", "State the internship role AND the exact dates.", function () { return !!(v("role") && v("period")); }],
@@ -712,14 +834,37 @@
       return !MONTHS.some(function (mo) { return t.indexOf(mo + " ") > -1; });
     }],
     ["Field & soft skills listed", "Add job-related skills and soft skills (see the suggestions).", function () { return !!(v("fieldSkills") && v("softSkills")); }],
-    ["Has a measurable result (number)", "Add a number to a bullet, e.g. 'packed 500 units per shift', 'managed RM2,000 budget'.", function () {
-      return /[0-9]/.test(["job1B1", "job1B2", "job1B3", "projB1", "projB2", "lead1B1", "lead1B2", "lead2B1"].map(v).join(""));
+    ["Most bullets show a measurable result (X-Y-Z)", "Use the X-Y-Z formula: accomplished X, measured by Y, by doing Z – e.g. 'Served 60 customers per shift with no cash errors'. Add a number to at least half of your bullets.", function () {
+      var filled = BULLET_KEYS.map(v).filter(Boolean);
+      return filled.length > 0 && filled.filter(hasNumber).length * 2 >= filled.length;
     }],
-    ["English level has proof (MUET / IELTS)", "Add your MUET band, e.g. English (MUET Band 3.5).", function () { return /muet|ielts|band/i.test(v("languages")); }]
+    ["English level has proof (MUET / IELTS)", "Add your MUET band, e.g. English (MUET Band 3.5).", function () { return /muet|ielts|band/i.test(v("languages")); }],
+    ["Summary is about 100 words or fewer", "Keep the profile to 2–3 sentences (about 100 words), including the 'Seeking…' sentence.", function () { var n = words(profileText()); return n > 0 && n <= 110; }],
+    ["Fits on 1–2 pages", "A resume should be 1–2 pages (1 page is best for students). Shorten bullets or remove less relevant items.", function () { return lastPages <= 2; }]
   ];
+  var CV_CHECKS = [
+    ["Full name is filled in", "Add your full name at the top.", function () { return !!v("name"); }],
+    ["Phone and email present", "Add a phone number and a professional email.", function () { return !!v("phone") && isEmail(v("email")); }],
+    ["Academic or professional address", "Add your department and institution in section 10.", function () { return !!v("cvAddress"); }],
+    ["Research & academic summary", "Write 2–4 sentences on your academic focus and research interests (section 10).", function () { return words(v("cvSummary")) >= 20; }],
+    ["Education with programme", "Add your institution and programme.", function () { return !!(v("edu1") && v("edu1Prog")); }],
+    ["Thesis, final project or academic project", "Add your thesis or final project title (section 10), or an academic project (section 4).", function () { return !!(v("edu1Thesis") || v("proj")); }],
+    ["Research or teaching experience", "Add research assistant work, lab or field work, or tutoring (section 10).", function () { return !!(lines("cvResearch").length || lines("cvTeaching").length); }],
+    ["Publications or presentations", "List papers, posters or talks, one per line (section 10).", function () { return !!(lines("cvPublications").length || lines("cvPresentations").length); }],
+    ["Grants, scholarships or awards", "Add scholarships, grants or awards.", function () { return !!(lines("cvGrants").length || v("ach1")); }],
+    ["Memberships, licences or certifications", "Add professional or student memberships, licences or certificates.", function () { return !!(lines("cvMemberships").length || lines("certifications").length); }],
+    ["Skills listed", "Add technical and field skills.", function () { return !!(v("techSkills") || v("fieldSkills")); }],
+    ["At least two full references", "List two referees, one per line: name, position, institution, email or phone (section 10). Ask them first.", function () {
+      return lines("cvReferences").filter(function (r) {
+        return r.split(",").filter(function (x) { return x.trim(); }).length >= 3 && (/[^\s@,]+@[^\s@,]+\.[^\s@,]+/.test(r) || /\+?\d[\d\s-]{7,}/.test(r));
+      }).length >= 2;
+    }]
+  ];
+  function activeChecks() { return state.docType === "cv" ? CV_CHECKS : RESUME_CHECKS; }
 
   function renderCoach() {
     var passed = 0, rows = "", meter = "";
+    var CHECKS = activeChecks();
     CHECKS.forEach(function (c) {
       var ok = c[2](); if (ok) passed++;
       rows += "<tr><td>" + esc(c[0]) + "</td><td>" + (ok ? '<span class="pill ok">✔ Done</span>' : '<span class="pill no">✗ Improve</span>') +
@@ -733,7 +878,8 @@
     $("scoreNum").textContent = score;
     $("scoreMsg").textContent = tone[0];
     $("meter").innerHTML = meter;
-    $("meterNote").textContent = passed + " of " + CHECKS.length + " checks passed · aim for 80 or more";
+    $("meter").style.gridTemplateColumns = "repeat(" + CHECKS.length + ", 1fr)";
+    $("meterNote").textContent = passed + " of " + CHECKS.length + " " + (state.docType === "cv" ? "CV" : "resume") + " checks passed · aim for 80 or more";
     $("scoreCard").style.setProperty("--c", tone[1]);
     $("scoreChip").style.setProperty("--c", score >= 80 ? "#6fdc9a" : score >= 60 ? "#8cc3ff" : score >= 40 ? "#f3c16b" : "#ff9b8f");
     $("scoreChipText").textContent = "Score " + score + " / 100";
@@ -751,8 +897,17 @@
   /* ============ 6. Render loop ============ */
   var timer = null;
   function schedule() { clearTimeout(timer); timer = setTimeout(function () { render(); persist(); }, 120); }
+  var DOC_HINT = {
+    resume: "Resume: 1–2 pages for internships and industry jobs.",
+    cv: "CV: full academic record for further study, scholarships and research posts. Fill in section 10."
+  };
   function render() {
     var html = modelToHTML(buildModel());
+    lastPages = countPages(html);
+    document.querySelectorAll("[data-doctype]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-doctype") === state.docType ? "true" : "false"); });
+    document.querySelectorAll("details.section[data-mode]").forEach(function (d) { d.hidden = d.getAttribute("data-mode") !== state.docType; });
+    $("docHint").textContent = DOC_HINT[state.docType];
+    $("pageInfo").textContent = (state.docType === "cv" ? "CV" : "Resume") + " · about " + lastPages + (lastPages === 1 ? " page" : " pages");
     $("paperFull").innerHTML = html;
     $("previewBox").innerHTML = html;
     fitPreview();
@@ -799,7 +954,7 @@
     return dlPromise;
   }
   var IN_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
-  var DL_HELP = "Download isn't available here. Open the link in Chrome or Safari and sign in, or use Print / Save as PDF.";
+  var DL_HELP = "Download isn't available here. Use Print / Save as PDF, or open the link in Chrome or Safari.";
   function showDlNotice() { var n = $("dlNotice"); if (n) n.hidden = false; }
   function saveFile(filename, blob) {
     return getDownloads().then(function (dl) {
@@ -826,9 +981,9 @@
       try { window.print(); } catch (e) { toast("Printing is blocked here. Open the link in Chrome or Safari."); }
     }, 150);
   }
-  function fileBase() {
+  function fileBase(kind) {
     var n = v("name").replace(/[^A-Za-z0-9 ]/g, "").trim().split(/\s+/).filter(Boolean).slice(0, 3).join("_");
-    return (n || "My") + "_Resume";
+    return (n || "My") + (kind === "cv" ? "_CV" : "_Resume");
   }
   function busy(action, on) {
     document.querySelectorAll('[data-action="' + action + '"]').forEach(function (b) {
@@ -844,7 +999,7 @@
     var W = 210, H = 297, ML = 14, MR = 14, MT = 12.7, MB = 12.7, CW = W - ML - MR;
     var PT = 0.3528, y = MT;
     var BUL_X = 1.4, BUL_TX = 4.9, BUL_L2 = 4.9; // same bullet position for every section
-    var NAVY = [31, 56, 100], DARK = [17, 17, 17], GREY = [51, 51, 51];
+    var NAVY = [17, 17, 17], DARK = [17, 17, 17], GREY = [51, 51, 51]; // black-and-white output
 
     function lh(size) { return size * PT * 1.28; }
     function ensure(h) { if (y + h > H - MB) { doc.addPage(); y = MT; } }
@@ -865,7 +1020,7 @@
     var photoW = 30, photoH = 38, textW = m.photo ? CW - photoW - 6 : CW, top = y;
     para(m.name || "YOUR FULL NAME", ML, textW, 18, "bold", NAVY);
     y += 1;
-    m.contact.forEach(function (c) { para(c, ML, textW, 9.5, "normal", GREY); });
+    m.contact.forEach(function (c) { para(c, ML, textW, 10, "normal", GREY); });
     if (m.photo) {
       if (m.photo === "placeholder") {
         doc.setDrawColor(201, 205, 212); doc.setFillColor(230, 232, 236);
@@ -944,7 +1099,7 @@
   }
   function makeDOCX() {
     var D = window.docx, m = buildModel();
-    var FONT = "Calibri", NAVY = "1F3864", GREY = "333333";
+    var FONT = "Calibri", NAVY = "111111", GREY = "333333"; // black-and-white output
     var CONTENT_TW = Math.round((210 - 28) / 25.4 * 1440); // twips
     function run(text, o) { o = o || {}; return new D.TextRun({ text: text, font: FONT, size: o.size || 21, bold: !!o.bold, italics: !!o.italic, color: o.color || "111111" }); }
     var kids = [];
@@ -999,7 +1154,8 @@
     });
 
     var d = new D.Document({
-      creator: "Resume Builder",
+      creator: "Automation Resume",
+      title: m.kind === "cv" ? "Curriculum Vitae" : "Resume",
       styles: { default: { document: { run: { font: FONT, size: 21 } } } },
       sections: [{
         properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 720, bottom: 720, left: 794, right: 794 } } },
@@ -1014,30 +1170,48 @@
 
   function doPDF() {
     busy("pdf", true);
-    loadScript(JSPDF_URL).then(function () { return saveFile(fileBase() + ".pdf", makePDF()); })
-      .catch(function () { toast("The PDF tool couldn't load. Check your internet connection and try again."); })
+    loadScript(JSPDF_URL).then(function () { return saveFile(fileBase(state.docType) + ".pdf", makePDF()); })
+      .catch(function () { toast("The PDF tool couldn't load. Use Print / Save as PDF instead, or check your internet connection and try again."); })
       .then(function () { busy("pdf", false); });
   }
   function doDOCX() {
     busy("docx", true);
-    loadScript(DOCX_URL).then(makeDOCX).then(function (blob) { return saveFile(fileBase() + ".docx", blob); })
-      .catch(function () { toast("The Word tool couldn't load. Check your internet connection and try again."); })
+    loadScript(DOCX_URL).then(makeDOCX).then(function (blob) { return saveFile(fileBase(state.docType) + ".docx", blob); })
+      .catch(function () { toast("The Word tool couldn't load. Use Print / Save as PDF instead, or check your internet connection and try again."); })
       .then(function () { busy("docx", false); });
   }
   function doBackup() {
-    var payload = JSON.stringify({ app: "resume-builder", version: 2, data: state.data, photo: state.photo, showPhoto: state.showPhoto }, null, 2);
-    saveFile(fileBase() + "_backup.json", new Blob([payload], { type: "application/json" }));
+    var payload = JSON.stringify({ app: APP_ID, version: 4, docType: state.docType, data: state.data, photo: state.photo, showPhoto: state.showPhoto }, null, 2);
+    saveFile(fileBase("resume") + "_backup.json", new Blob([payload], { type: "application/json" }));
+  }
+  var MAX_BACKUP_BYTES = 5 * 1024 * 1024;
+  function isValidBackup(p) {
+    if (!p || typeof p !== "object" || BACKUP_APPS.indexOf(p.app) < 0) return false;
+    var d = p.data;
+    if (!d || typeof d !== "object" || Array.isArray(d)) return false;
+    var known = 0;
+    for (var i = 0; i < ALL_KEYS.length; i++) {
+      if (!(ALL_KEYS[i] in d)) continue;
+      if (typeof d[ALL_KEYS[i]] !== "string") return false;
+      known++;
+    }
+    if (!known) return false;
+    if (p.photo != null && p.photo !== "" && !(typeof p.photo === "string" && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(p.photo))) return false;
+    if (p.docType != null && p.docType !== "resume" && p.docType !== "cv") return false;
+    return true;
   }
   function doRestore(file) {
+    if (file.size > MAX_BACKUP_BYTES) { toast("That file is too large to be a backup from this app."); return; }
     var r = new FileReader();
     r.onload = function () {
       try {
         var p = JSON.parse(r.result);
-        if (!p || typeof p.data !== "object") throw new Error("shape");
-        applyState({ data: p.data, photo: p.photo, showPhoto: p.showPhoto, isExample: false });
+        if (!isValidBackup(p)) throw new Error("shape");
+        applyState({ data: p.data, photo: p.photo, showPhoto: p.showPhoto, isExample: false, docType: p.docType });
         fillForm(); render(); persist(); toast("Backup opened");
-      } catch (e) { toast("That file isn't a Resume Builder backup. Choose the .json file you saved."); }
+      } catch (e) { toast("That file isn't a backup from this app. Choose the .json file you saved."); }
     };
+    r.onerror = function () { toast("That file couldn't be read. Try again, or choose another backup file."); };
     r.readAsText(file);
   }
   function doPhoto(file) {
@@ -1074,10 +1248,12 @@
   }
 
   document.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-tab],[data-go],[data-action],[data-use]");
+    var t = e.target.closest("[data-tab],[data-go],[data-action],[data-use],[data-doctype]");
     if (!t) return;
     var tab = t.getAttribute("data-tab") || t.getAttribute("data-go");
-    if (tab) { switchTab(tab); return; }
+    if (tab) { if (t.tagName === "A") e.preventDefault(); switchTab(tab); return; }
+    var dt = t.getAttribute("data-doctype");
+    if (dt) { state.docType = dt === "cv" ? "cv" : "resume"; render(); persist(); return; }
     var use = t.getAttribute("data-use");
     if (use) {
       var d = FIELD_DATA[$("fieldSelect").value];
@@ -1095,10 +1271,22 @@
       case "photo": $("photoInput").click(); break;
       case "photo-remove": state.photo = ""; render(); persist(); toast("Photo removed"); break;
       case "sample":
-        applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), photo: "", showPhoto: true, isExample: true });
+        applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), photo: "", showPhoto: false, isExample: true, docType: state.docType });
         fillForm(); render(); persist(); toast("Example loaded");
         break;
       case "clear-now": clearAll(); break;
+      case "warn-ok":
+        try { localStorage.setItem(WARN_KEY, "1"); } catch (e) {}
+        $("sharedWarn").hidden = true;
+        break;
+      case "delete-all":
+        if (!t._armed) {
+          t._armed = true; t._label = t.textContent; t.textContent = "Click again to delete everything on this device";
+          setTimeout(function () { t._armed = false; t.textContent = t._label; }, 3500);
+          return;
+        }
+        deleteAllData();
+        break;
       case "clear":
         if (!t._armed) {
           t._armed = true; t.textContent = "Click again to clear everything";
@@ -1119,7 +1307,8 @@
   /* ============ 9. Start ============ */
   buildForm();
   buildFieldSelect();
-  if (!restoreLocal()) applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), isExample: true });
+  showSharedWarning();
+  if (!restoreLocal()) applyState({ data: JSON.parse(JSON.stringify(SAMPLE)), isExample: true, docType: state.docType });
   fillForm();
   render();
   var lastTab = null;
